@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package dao;
+package dao.impl;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -18,7 +18,7 @@ import java.util.logging.Logger;
 public class DbConnection {
     
     static String driver = "com.mysql.cj.jdbc.Driver";
-    static String url = "jdbc:mysql://localhost:3306/ipon";
+    static String url = "jdbc:mysql://localhost:3306/ipon?useSSL=false";
     
     public static Connection getConnect() {
         Connection con = null;
