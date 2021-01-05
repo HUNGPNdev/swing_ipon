@@ -18,8 +18,6 @@ public class ProductEntity {
     private int now_count;
     private double price;
     private String cou_id;
-<<<<<<< HEAD
-=======
 
     public ProductEntity() {
     }
@@ -111,7 +109,6 @@ public class ProductEntity {
     public String toString() {
         return "ProductEntity{" + "id=" + id + ", name=" + name + ", cate_id=" + cate_id + ", old_count=" + old_count + ", now_count=" + now_count + ", price=" + price + ", cou_id=" + cou_id + '}';
     }
->>>>>>> 7515b971883b024348893979712532e83a96d9f4
     
     
     
