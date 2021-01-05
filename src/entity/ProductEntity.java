@@ -40,6 +40,14 @@ public class ProductEntity {
         this.price = price;
         this.cou_id = cou_id;
     }
+    
+    public ProductEntity(String name, int cate_id, int old_count, int now_count, double price) {
+        this.name = name;
+        this.cate_id = cate_id;
+        this.old_count = old_count;
+        this.now_count = now_count;
+        this.price = price;
+    }
 
     public int getId() {
         return id;

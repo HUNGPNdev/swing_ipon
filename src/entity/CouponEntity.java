@@ -12,7 +12,7 @@ import java.sql.Date;
  * @author Lenovo
  */
 public class CouponEntity {
-    private int id;
+    private String id;
     private int em_id;
     private String supplier_name;
     private double total_price;
@@ -21,7 +21,7 @@ public class CouponEntity {
     public CouponEntity() {
     }
 
-    public CouponEntity(int id, int em_id, String supplier_name, double total_price, Date date_creat) {
+    public CouponEntity(String id, int em_id, String supplier_name, double total_price, Date date_creat) {
         this.id = id;
         this.em_id = em_id;
         this.supplier_name = supplier_name;
@@ -36,11 +36,11 @@ public class CouponEntity {
         this.date_creat = date_creat;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 
