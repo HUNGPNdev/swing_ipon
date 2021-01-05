@@ -5,17 +5,18 @@
  */
 package dao;
 
+import entity.ProductEntity;
 import java.util.List;
 
 /**
  *
  * @author Lenovo
  */
-public interface interfaceDAO<T, K> {
+public interface CouponDAO<T, K> {
     List<T> getAll();
     T getById(K id);
-    void insert(T t);
-    void update(T t);
+    void insert(T t, List<ProductEntity> listPro);
+    void update(T t, List<ProductEntity> listPro);
     void deleteById(K id);
     List<T> search(String name);
 }
