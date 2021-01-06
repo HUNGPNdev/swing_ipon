@@ -22,6 +22,12 @@ public class Em_RoleEntity {
         this.role_id = role_id;
     }
 
+    public Em_RoleEntity(int em_id) {
+        this.em_id = em_id;
+    }
+    
+    
+
     @Override
     public String toString() {
         return "Em_RoleEntity{" + "em_id=" + em_id + ", role_id=" + role_id + '}';
