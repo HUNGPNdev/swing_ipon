@@ -36,6 +36,11 @@ public class Bill_proEntity {
     public void setBill_id(int bill_id) {
         this.bill_id = bill_id;
     }
+
+    @Override
+    public String toString() {
+        return "Bill_proEntity{" + "pro_id=" + pro_id + ", bill_id=" + bill_id + '}';
+    }
     
     
 }
