@@ -475,6 +475,7 @@ public class AccountList extends javax.swing.JInternalFrame {
                                     em.setStatus(false);
                                 }
                                 msg.setText("");
+                                em_id.setText("");
                                 demp.update(em);
                                 List<Em_RoleEntity> list = new ArrayList<>();
                                 int[] selectedIx = role.getSelectedIndices();

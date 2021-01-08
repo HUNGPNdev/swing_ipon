@@ -113,7 +113,6 @@ public class ProductList extends javax.swing.JInternalFrame {
 
         btnsaveedit.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resouce/icons8_ok_30px.png"))); // NOI18N
         btnsaveedit.setText("Lưu\n");
-        btnsaveedit.setActionCommand("Lưu\n");
         btnsaveedit.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 btnsaveeditMouseClicked(evt);

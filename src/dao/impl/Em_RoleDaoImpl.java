@@ -63,7 +63,7 @@ public class Em_RoleDaoImpl {
     
     public void deleteAll(int em_id) {
         try {
-            PreparedStatement pst = con.prepareStatement("delete from em_role where em_id=?");
+            PreparedStatement pst = con.prepareStatement("delete from em_role where em_id = ?");
             pst.setInt(1, em_id);
             pst.executeUpdate();
         } catch (SQLException ex) {
