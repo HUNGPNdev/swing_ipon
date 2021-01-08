@@ -20,6 +20,13 @@ public class EmployeeEntity {
     public EmployeeEntity() {
     }
 
+    public EmployeeEntity(String username, String password) {
+        this.username = username;
+        this.password = password;
+    }
+    
+    
+
     public EmployeeEntity(int id, String fullname, String username, String password, boolean status) {
         this.id = id;
         this.fullname = fullname;

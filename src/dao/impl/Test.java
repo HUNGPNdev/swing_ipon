@@ -26,11 +26,14 @@ public class Test {
      */
     public static void main(String[] args) {
         Connection con = DbConnection.getConnect();
-        Pro_billDaoImpl dpb = new Pro_billDaoImpl(con);
-        List<Bill_proEntity> pb = new ArrayList<>();
-        pb.add(new Bill_proEntity(6, 1));
-        dpb.update(pb);
-        System.out.println(dpb.getByBill_Id(1));
+        EmployeeDaoImpl em = new EmployeeDaoImpl(con);
+        Em_RoleDaoImpl er = new Em_RoleDaoImpl(con);
+//        List<Em_RoleEntity> list = new ArrayList<>();
+//        list.add(new Em_RoleEntity(2, 2));
+//        list.add(new Em_RoleEntity(2, 3));
+//        er.update(list);
+        System.out.println(em.findByUsername("vana"));
+//        System.out.println(er.getByUser_id(2));
     }
     
 }

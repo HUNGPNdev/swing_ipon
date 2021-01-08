@@ -60,6 +60,16 @@ public class Em_RoleDaoImpl {
         }
         return list;
     }
+    
+    public void deleteAll(int em_id) {
+        try {
+            PreparedStatement pst = con.prepareStatement("delete from em_role where em_id = ?");
+            pst.setInt(1, em_id);
+            pst.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(Em_RoleDaoImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 
     public void delete(Em_RoleEntity t) {
         try {

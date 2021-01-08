@@ -39,7 +39,7 @@ public class RoleDaoImpl implements InterfaceDAO<RoleEntity, Integer>{
         List<RoleEntity> list = new ArrayList<>();
         try {
             Statement st = con.createStatement();
-            ResultSet rs = st.executeQuery("select * from role");
+            ResultSet rs = st.executeQuery("select * from `role`");
             while(rs.next()) {
                 list.add(new RoleEntity(rs.getInt(1), rs.getString(2)));
             }
@@ -53,7 +53,7 @@ public class RoleDaoImpl implements InterfaceDAO<RoleEntity, Integer>{
     public RoleEntity getById(Integer id) {
         RoleEntity c = null;
         try {
-            PreparedStatement pst = con.prepareStatement("select * from role where id = ?");
+            PreparedStatement pst = con.prepareStatement("select * from `role` where id = ?");
             pst.setInt(1, id);
             ResultSet rs = pst.executeQuery();
             if(rs.next()) {
@@ -68,7 +68,7 @@ public class RoleDaoImpl implements InterfaceDAO<RoleEntity, Integer>{
     @Override
     public void insert(RoleEntity t) {
         try {
-            PreparedStatement pst = con.prepareStatement("insert into role values(?,?)");
+            PreparedStatement pst = con.prepareStatement("insert into `role` values(?,?)");
             pst.setInt(1, t.getId());
             pst.setString(2, t.getName());
             pst.executeUpdate();
@@ -80,7 +80,7 @@ public class RoleDaoImpl implements InterfaceDAO<RoleEntity, Integer>{
     @Override
     public void update(RoleEntity t) {
         try {
-            PreparedStatement pst = con.prepareStatement("update role set name = ? where id = ?");
+            PreparedStatement pst = con.prepareStatement("update `role` set name = ? where id = ?");
             pst.setString(1, t.getName());
             pst.setInt(2, t.getId());
             pst.executeUpdate();
@@ -92,7 +92,7 @@ public class RoleDaoImpl implements InterfaceDAO<RoleEntity, Integer>{
     @Override
     public void deleteById(Integer id) {
         try {
-            PreparedStatement pst = con.prepareStatement("delete from role where id = ?");
+            PreparedStatement pst = con.prepareStatement("delete from `role` where id = ?");
             pst.setInt(1, id);
             pst.executeUpdate();
         } catch (SQLException ex) {
@@ -104,7 +104,7 @@ public class RoleDaoImpl implements InterfaceDAO<RoleEntity, Integer>{
     public List<RoleEntity> search(String name) {
         List<RoleEntity> list = new ArrayList<>();
         try {
-            PreparedStatement pst = con.prepareStatement("select * from role where name like ?");
+            PreparedStatement pst = con.prepareStatement("select * from `role` where name like ?");
             pst.setString(1, "%"+name+"%");
             ResultSet rs = pst.executeQuery();
             while(rs.next()) {
