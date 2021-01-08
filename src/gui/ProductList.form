@@ -260,7 +260,6 @@
               <Image iconType="3" name="/resouce/icons8_ok_30px.png"/>
             </Property>
             <Property name="text" type="java.lang.String" value="L&#x1b0;u&#xa;"/>
-            <Property name="actionCommand" type="java.lang.String" value="L&#x1b0;u&#xa;"/>
           </Properties>
           <Events>
             <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="btnsaveeditMouseClicked"/>

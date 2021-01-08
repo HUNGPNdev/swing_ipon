@@ -18,6 +18,8 @@ public class FormMain extends javax.swing.JFrame {
     private Home home;
     private AccountList accountList;
     private ProductList productList;
+    private CouponList coupontList;
+    private BillList billList;
 
     /**
      * Creates new form FormMain
@@ -27,9 +29,13 @@ public class FormMain extends javax.swing.JFrame {
         home = new Home();
         accountList = new AccountList();
         productList = new ProductList();
+        coupontList = new CouponList();
+        billList = new BillList();
         destop.add(home).setVisible(true);
         destop.add(productList);
         destop.add(accountList);
+        destop.add(coupontList);
+        destop.add(billList);
 
     }
 
@@ -44,7 +50,7 @@ public class FormMain extends javax.swing.JFrame {
 
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
+        btnLogout = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
@@ -54,7 +60,7 @@ public class FormMain extends javax.swing.JFrame {
         product = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
         jSeparator1 = new javax.swing.JSeparator();
-        jLabel13 = new javax.swing.JLabel();
+        couponShow = new javax.swing.JLabel();
         jSeparator2 = new javax.swing.JSeparator();
         jLabel14 = new javax.swing.JLabel();
         jLabel15 = new javax.swing.JLabel();
@@ -68,7 +74,7 @@ public class FormMain extends javax.swing.JFrame {
         jLabel17 = new javax.swing.JLabel();
         jLabel20 = new javax.swing.JLabel();
         jLabel21 = new javax.swing.JLabel();
-        jLabel22 = new javax.swing.JLabel();
+        btnShowBillList = new javax.swing.JLabel();
         destop = new javax.swing.JDesktopPane();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -82,8 +88,13 @@ public class FormMain extends javax.swing.JFrame {
         jLabel1.setText("Quản Lí Cửa Hàng");
         jLabel1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
 
-        jButton1.setBackground(new java.awt.Color(0, 0, 0));
-        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resouce/exit.png"))); // NOI18N
+        btnLogout.setBackground(new java.awt.Color(0, 0, 0));
+        btnLogout.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resouce/exit.png"))); // NOI18N
+        btnLogout.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnLogoutActionPerformed(evt);
+            }
+        });
 
         jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resouce/icons8_settings_30px.png"))); // NOI18N
 
@@ -96,7 +107,7 @@ public class FormMain extends javax.swing.JFrame {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnLogout, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jLabel4)
                 .addGap(476, 476, 476)
@@ -110,7 +121,7 @@ public class FormMain extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jButton1)
+                    .addComponent(btnLogout)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -142,9 +153,14 @@ public class FormMain extends javax.swing.JFrame {
 
         jLabel10.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resouce/icons8_multiple_smartphones_30px.png"))); // NOI18N
 
-        jLabel13.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jLabel13.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel13.setText("Phiếu Nhập");
+        couponShow.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        couponShow.setForeground(new java.awt.Color(255, 255, 255));
+        couponShow.setText("Phiếu Nhập");
+        couponShow.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                couponShowMouseClicked(evt);
+            }
+        });
 
         jLabel14.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel14.setForeground(new java.awt.Color(255, 255, 255));
@@ -177,9 +193,14 @@ public class FormMain extends javax.swing.JFrame {
 
         jLabel21.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resouce/icons8_agreement_30px.png"))); // NOI18N
 
-        jLabel22.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jLabel22.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel22.setText("Hóa Đơn");
+        btnShowBillList.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        btnShowBillList.setForeground(new java.awt.Color(255, 255, 255));
+        btnShowBillList.setText("Hóa Đơn");
+        btnShowBillList.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnShowBillListMouseClicked(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -201,7 +222,7 @@ public class FormMain extends javax.swing.JFrame {
                         .addContainerGap())
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGap(18, 18, 18)
-                        .addComponent(jLabel13, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                        .addComponent(couponShow, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
             .addComponent(jSeparator5)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGap(31, 31, 31)
@@ -213,7 +234,7 @@ public class FormMain extends javax.swing.JFrame {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(product, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jLabel17, javax.swing.GroupLayout.DEFAULT_SIZE, 134, Short.MAX_VALUE)
-                    .addComponent(jLabel22, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addComponent(btnShowBillList, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGap(31, 31, 31)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -254,11 +275,11 @@ public class FormMain extends javax.swing.JFrame {
                         .addComponent(jLabel21))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jLabel22, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(btnShowBillList, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(25, 25, 25)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel8)
-                    .addComponent(jLabel13, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(couponShow, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(26, 26, 26)
                 .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
@@ -322,14 +343,40 @@ public class FormMain extends javax.swing.JFrame {
     private void accountMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_accountMouseClicked
         home.setVisible(false);
         productList.setVisible(false);
+        coupontList.setVisible(false);
+        billList.setVisible(false);
         accountList.setVisible(true);
     }//GEN-LAST:event_accountMouseClicked
 
     private void productMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_productMouseClicked
         home.setVisible(false);
+        billList.setVisible(false);
+        coupontList.setVisible(false);
         accountList.setVisible(false);
         productList.setVisible(true);
     }//GEN-LAST:event_productMouseClicked
+
+    private void couponShowMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_couponShowMouseClicked
+        home.setVisible(false);
+        billList.setVisible(false);
+        coupontList.setVisible(true);
+        accountList.setVisible(false);
+        productList.setVisible(false);
+    }//GEN-LAST:event_couponShowMouseClicked
+
+    private void btnShowBillListMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnShowBillListMouseClicked
+        home.setVisible(false);
+        billList.setVisible(true);
+        coupontList.setVisible(false);
+        accountList.setVisible(false);
+        productList.setVisible(false);
+    }//GEN-LAST:event_btnShowBillListMouseClicked
+
+    private void btnLogoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogoutActionPerformed
+        this.setVisible(false);
+        Login login  = new Login();
+        login.setVisible(true);
+    }//GEN-LAST:event_btnLogoutActionPerformed
 
     /**
      * @param args the command line arguments
@@ -371,11 +418,12 @@ public class FormMain extends javax.swing.JFrame {
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel account;
+    private javax.swing.JButton btnLogout;
+    private javax.swing.JLabel btnShowBillList;
+    private javax.swing.JLabel couponShow;
     private javax.swing.JDesktopPane destop;
-    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
-    private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel16;
@@ -385,7 +433,6 @@ public class FormMain extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel20;
     private javax.swing.JLabel jLabel21;
-    private javax.swing.JLabel jLabel22;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
