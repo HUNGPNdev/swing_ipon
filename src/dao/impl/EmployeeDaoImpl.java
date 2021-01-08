@@ -46,6 +46,21 @@ public class EmployeeDaoImpl implements InterfaceDAO<EmployeeEntity, Integer>{
         }
         return list;
     }
+    
+    public EmployeeEntity checkLogin(String username, String password) {
+        try {
+            PreparedStatement pst = con.prepareStatement("select * from employee where username = ? and password = ?");
+            pst.setString(1, username);
+            pst.setString(2, password);
+            ResultSet rs = pst.executeQuery();
+            if (rs.next()) {
+                return new EmployeeEntity(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getBoolean(5));
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(EmployeeDaoImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
 
     @Override
     public EmployeeEntity getById(Integer id) {
@@ -55,7 +70,7 @@ public class EmployeeDaoImpl implements InterfaceDAO<EmployeeEntity, Integer>{
             pst.setInt(1, id);
             ResultSet rs = pst.executeQuery();
             if(rs.next()) {
-                c = new EmployeeEntity(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getBoolean(4));
+                c = new EmployeeEntity(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getBoolean(5));
             }
         } catch (SQLException ex) {
             Logger.getLogger(CategoryDaoImpl.class.getName()).log(Level.SEVERE, null, ex);
@@ -103,6 +118,15 @@ public class EmployeeDaoImpl implements InterfaceDAO<EmployeeEntity, Integer>{
             Logger.getLogger(CategoryDaoImpl.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+    
+    public EmployeeEntity findByUsername(String username) {
+        for(EmployeeEntity e: getAll()) {
+            if(e.getUsername().equals(username)) {
+                return e;
+            }
+        }
+        return null;
+    } 
 
     @Override
     public List<EmployeeEntity> search(String name) {

@@ -5,6 +5,8 @@
  */
 package gui;
 
+import javax.swing.JFrame;
+
 /**
  *
  * @author admin
