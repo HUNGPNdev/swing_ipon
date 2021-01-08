@@ -33,7 +33,4 @@ public class DbConnection {
         return con;
     }
     
-    public static void main(String args[]) {
-        getConnect();
-    }
 }
