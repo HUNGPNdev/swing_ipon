@@ -41,6 +41,7 @@ public class CouponList extends javax.swing.JInternalFrame {
     /**
      * Creates new form CouponList
      */
+    
     public CouponList(EmployeeEntity em) {
         initComponents();
         this.em = em;

@@ -19,6 +19,9 @@ public class Home extends javax.swing.JInternalFrame {
     public Home() {
         initComponents();
     }
+    public void setName(String name){
+        txtNameLogin.setText(name);
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -30,16 +33,15 @@ public class Home extends javax.swing.JInternalFrame {
     private void initComponents() {
 
         jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
+        txtNameLogin = new javax.swing.JLabel();
 
         setBackground(new java.awt.Color(255, 255, 255));
 
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resouce/icons8_thumb_up_99px.png"))); // NOI18N
 
-        jLabel2.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
-        jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel2.setText("Xin Chào Username");
+        txtNameLogin.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        txtNameLogin.setText("Xin Chào Username");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -49,7 +51,7 @@ public class Home extends javax.swing.JInternalFrame {
                 .addContainerGap(334, Short.MAX_VALUE)
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 266, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(txtNameLogin, javax.swing.GroupLayout.PREFERRED_SIZE, 266, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(366, 366, 366))
         );
         layout.setVerticalGroup(
@@ -60,7 +62,7 @@ public class Home extends javax.swing.JInternalFrame {
                     .addComponent(jLabel1)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(29, 29, 29)
-                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(txtNameLogin, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(392, Short.MAX_VALUE))
         );
 
@@ -70,6 +72,6 @@ public class Home extends javax.swing.JInternalFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel txtNameLogin;
     // End of variables declaration//GEN-END:variables
 }

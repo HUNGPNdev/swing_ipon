@@ -7,6 +7,10 @@ package gui;
 
 import entity.EmployeeEntity;
 import java.net.URISyntaxException;
+
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import javax.swing.JOptionPane;
 
 /**
@@ -15,6 +19,7 @@ import javax.swing.JOptionPane;
  */
 public class FormMain extends javax.swing.JFrame {
 
+    private Boolean checkAdmin = false;
     private Home home;
     private AccountList accountList;
     private ProductList productList;
@@ -25,6 +30,40 @@ public class FormMain extends javax.swing.JFrame {
     /**
      * Creates new form FormMain
      */
+    public FormMain(EmployeeEntity em, Boolean checkAdmin) throws URISyntaxException {
+        this.checkAdmin = checkAdmin;
+        initComponents();
+        this.em = em;
+        username.setText(em.getFullname());
+
+        if (checkAdmin) {
+            home = new Home();
+            home.setName(em.getFullname());
+            accountList = new AccountList();
+            productList = new ProductList();
+            coupontList = new CouponList(em);
+            billList = new BillList();
+
+            destop.add(home).setVisible(true);
+            destop.add(productList);
+            destop.add(accountList);
+            destop.add(coupontList);
+            destop.add(billList);
+        } else {
+            home = new Home();
+            home.setName(em.getFullname());
+            accountList = new AccountList();
+            productList = new ProductList();
+            coupontList = new CouponList(em);
+            billList = new BillList();
+            account.setEnabled(false);
+            destop.add(home).setVisible(true);
+            destop.add(productList);
+            destop.add(accountList);
+            destop.add(coupontList);
+            destop.add(billList);
+        }
+    }
     public FormMain() throws URISyntaxException {
         initComponents();
     }
@@ -348,11 +387,16 @@ public class FormMain extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void accountMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_accountMouseClicked
-        home.setVisible(false);
-        productList.setVisible(false);
-        coupontList.setVisible(false);
-        billList.setVisible(false);
-        accountList.setVisible(true);
+        if (checkAdmin) {
+            home.setVisible(false);
+            productList.setVisible(false);
+            coupontList.setVisible(false);
+            billList.setVisible(false);
+            accountList.setVisible(true);
+        } else {
+            JOptionPane.showMessageDialog(this,
+                    "Bạn Không Có Quyền Truy Cập");
+        }
     }//GEN-LAST:event_accountMouseClicked
 
     private void productMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_productMouseClicked
@@ -380,6 +424,7 @@ public class FormMain extends javax.swing.JFrame {
     }//GEN-LAST:event_btnShowBillListMouseClicked
 
     private void btnLogoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogoutActionPerformed
+    
         int opcion = JOptionPane.showConfirmDialog(this, "Bạn muốn đăng xuất?", "CẢNH BÁO!", JOptionPane.YES_NO_OPTION);
         if (opcion == 0) {
             this.setVisible(false);
