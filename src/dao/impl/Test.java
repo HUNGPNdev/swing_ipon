@@ -7,6 +7,7 @@ package dao.impl;
 
 import entity.BillEntity;
 import entity.Bill_proEntity;
+import entity.CouponEntity;
 import entity.Em_RoleEntity;
 import entity.RoleEntity;
 import java.util.Calendar;
@@ -26,14 +27,11 @@ public class Test {
      */
     public static void main(String[] args) {
         Connection con = DbConnection.getConnect();
-        EmployeeDaoImpl em = new EmployeeDaoImpl(con);
-        Em_RoleDaoImpl er = new Em_RoleDaoImpl(con);
-//        List<Em_RoleEntity> list = new ArrayList<>();
-//        list.add(new Em_RoleEntity(2, 2));
-//        list.add(new Em_RoleEntity(2, 3));
-//        er.update(list);
-        System.out.println(em.findByUsername("vana"));
-//        System.out.println(er.getByUser_id(2));
+        CouponDaoImpl coup = new CouponDaoImpl(con);
+//        CouponEntity c = coup.getById("1");
+//        c.setTotal_price(2222);
+//        System.out.println(c);
+System.out.println(coup.getAll());
     }
     
 }

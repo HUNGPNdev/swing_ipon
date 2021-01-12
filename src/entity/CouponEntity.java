@@ -28,6 +28,13 @@ public class CouponEntity {
         this.total_price = total_price;
         this.date_creat = date_creat;
     }
+    
+    public CouponEntity(String id, int em_id, String supplier_name, double total_price) {
+        this.id = id;
+        this.em_id = em_id;
+        this.supplier_name = supplier_name;
+        this.total_price = total_price;
+    }
 
     public CouponEntity(int em_id, String supplier_name, double total_price, Date date_creat) {
         this.em_id = em_id;

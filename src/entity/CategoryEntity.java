@@ -42,11 +42,9 @@ public class CategoryEntity {
         this.name = name;
     }
     
-    
-
     @Override
     public String toString() {
-        return "CategoryEntity{" + "id=" + id + ", name=" + name + '}';
+        return name;
     }
     
     

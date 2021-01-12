@@ -14,6 +14,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -22,19 +23,19 @@ import java.util.logging.Logger;
  *
  * @author Lenovo
  */
+public class CouponDaoImpl implements CouponDAO<CouponEntity, String> {
 
-public class CouponDaoImpl implements CouponDAO<CouponEntity, String>{
-    
     private Connection con;
-    
+
     ProductDaoImpl dpro = null;
 
     public CouponDaoImpl(Connection con) {
         this.con = con;
         dpro = new ProductDaoImpl(con);
     }
-    
-    public CouponDaoImpl() {}
+
+    public CouponDaoImpl() {
+    }
 
     @Override
     public List<CouponEntity> getAll() {
@@ -42,8 +43,8 @@ public class CouponDaoImpl implements CouponDAO<CouponEntity, String>{
         try {
             Statement st = con.createStatement();
             ResultSet rs = st.executeQuery("select * from coupon");
-            while(rs.next()) {
-                CouponEntity c = new CouponEntity(rs.getString(1), rs.getInt(2),rs.getString(3), rs.getDouble(4),rs.getDate(5));
+            while (rs.next()) {
+                CouponEntity c = new CouponEntity(rs.getString(1), rs.getInt(2), rs.getString(3), rs.getDouble(4), rs.getDate(5));
                 list.add(c);
             }
         } catch (SQLException ex) {
@@ -58,8 +59,8 @@ public class CouponDaoImpl implements CouponDAO<CouponEntity, String>{
             PreparedStatement pst = con.prepareStatement("select * from coupon where id = ?");
             pst.setString(1, id);
             ResultSet rs = pst.executeQuery();
-            if(rs.next()) {
-                return new CouponEntity(rs.getString(1), rs.getInt(2),rs.getString(3), rs.getDouble(4),rs.getDate(5));
+            if (rs.next()) {
+                return new CouponEntity(rs.getString(1), rs.getInt(2), rs.getString(3), rs.getDouble(4), rs.getDate(5));
             }
         } catch (SQLException ex) {
             Logger.getLogger(ProductDaoImpl.class.getName()).log(Level.SEVERE, null, ex);
@@ -75,9 +76,9 @@ public class CouponDaoImpl implements CouponDAO<CouponEntity, String>{
             pst.setInt(2, t.getEm_id());
             pst.setString(3, t.getSupplier_name());
             pst.setDouble(4, t.getTotal_price());
-            pst.setDate(5, t.getDate_creat());
+            pst.setDate(5, new java.sql.Date(Calendar.getInstance().getTimeInMillis()));
             pst.executeUpdate();
-            for(ProductEntity p: listPro) {
+            for (ProductEntity p : listPro) {
                 p.setCou_id(t.getId());
                 dpro.insert(p);
             }
@@ -89,15 +90,19 @@ public class CouponDaoImpl implements CouponDAO<CouponEntity, String>{
     @Override
     public void update(CouponEntity t, List<ProductEntity> listPro) {
         try {
-            PreparedStatement pst = con.prepareStatement("update coupon set em_id=?, supplier_name=?, total_price=?, date_create=? where id = ?");
+            PreparedStatement pst = con.prepareStatement("update coupon set em_id=?, supplier_name=?, total_price=? where id = ?");
             pst.setInt(1, t.getEm_id());
             pst.setString(2, t.getSupplier_name());
             pst.setDouble(3, t.getTotal_price());
-            pst.setDate(4, t.getDate_creat());
-            pst.setString(5, t.getId());
+            pst.setString(4, t.getId());
             pst.executeUpdate();
-            for(ProductEntity p: listPro) {
-                dpro.update(p);
+            for (ProductEntity p : listPro) {
+                if (p.getId() == 0) {
+                    p.setCou_id(t.getId());
+                    dpro.insert(p);
+                } else {
+                    dpro.update(p);
+                }
             }
         } catch (SQLException ex) {
             Logger.getLogger(CouponDaoImpl.class.getName()).log(Level.SEVERE, null, ex);
@@ -117,22 +122,21 @@ public class CouponDaoImpl implements CouponDAO<CouponEntity, String>{
             Logger.getLogger(RoleDaoImpl.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
     @Override
     public List<CouponEntity> search(String name) {
         List<CouponEntity> list = new ArrayList<>();
         try {
             PreparedStatement pst = con.prepareStatement("select * from coupon where supplier_name like ?");
-            pst.setString(1, "%"+name+"%");
+            pst.setString(1, "%" + name + "%");
             ResultSet rs = pst.executeQuery();
-            while(rs.next()) {
-                list.add(new CouponEntity(rs.getString(1), rs.getInt(2),rs.getString(3), rs.getDouble(4),rs.getDate(5)));
+            while (rs.next()) {
+                list.add(new CouponEntity(rs.getString(1), rs.getInt(2), rs.getString(3), rs.getDouble(4), rs.getDate(5)));
             }
         } catch (SQLException ex) {
             Logger.getLogger(ProductDaoImpl.class.getName()).log(Level.SEVERE, null, ex);
         }
         return list;
     }
-    
-    
+
 }
