@@ -7,8 +7,6 @@ package gui;
 
 import entity.EmployeeEntity;
 import java.net.URISyntaxException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -26,6 +24,9 @@ public class FormMain extends javax.swing.JFrame {
     /**
      * Creates new form FormMain
      */
+    public FormMain() throws URISyntaxException {
+        initComponents();
+    }
     public FormMain(EmployeeEntity em) throws URISyntaxException {
         initComponents();
         this.em = em;
@@ -33,7 +34,7 @@ public class FormMain extends javax.swing.JFrame {
         home = new Home();
         accountList = new AccountList();
         productList = new ProductList();
-        coupontList = new CouponList();
+        coupontList = new CouponList(em);
         billList = new BillList();
         
         destop.add(home).setVisible(true);
@@ -365,7 +366,7 @@ public class FormMain extends javax.swing.JFrame {
         billList.setVisible(false);
         coupontList.setVisible(true);
         accountList.setVisible(false);
-        productList.setVisible(false);
+        productList.setVisible(false); 
     }//GEN-LAST:event_couponShowMouseClicked
 
     private void btnShowBillListMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnShowBillListMouseClicked
