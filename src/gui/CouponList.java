@@ -5,17 +5,87 @@
  */
 package gui;
 
+import dao.impl.CouponDaoImpl;
+import dao.impl.DbConnection;
+import dao.impl.EmployeeDaoImpl;
+import dao.impl.Pro_coupDAOImpl;
+import dao.impl.ProductDaoImpl;
+import entity.CouponEntity;
+import entity.ProductEntity;
+import java.sql.Connection;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Vector;
+import javax.swing.table.DefaultTableModel;
+import static dao.impl.Pro_coupDAOImpl.*;
+import entity.EmployeeEntity;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author admin
  */
 public class CouponList extends javax.swing.JInternalFrame {
+
+    private CouponDaoImpl dcoup;
+    private ProductDaoImpl dpro;
+    private EmployeeDaoImpl demp;
+    private EmployeeEntity em;
+    private boolean checkChooserPro = false;
+    private Connection con;
+    public static List<ProductEntity> listProByCou_Id = null;
+    public static String coup_id = null;
+    public Pro_coupDAOImpl pro_coup = new Pro_coupDAOImpl();
     
+
     /**
      * Creates new form CouponList
      */
-    public CouponList() {
+    
+    public CouponList(EmployeeEntity em) {
         initComponents();
+        this.em = em;
+        con = DbConnection.getConnect();
+        dcoup = new CouponDaoImpl(con);
+        dpro = new ProductDaoImpl(con);
+        demp = new EmployeeDaoImpl(con);
+        this.loadCoupon();
+    }
+
+    private void loadPage() {
+        id.setText("");
+        supplier_name.setText("");
+        total_price.setText("");
+        msg.setText("");
+        coup_id = null;
+        checkChooserPro = false;
+    }
+
+    private void loadCoupon() {
+        DefaultTableModel model = new DefaultTableModel();
+        Vector cols = new Vector();
+        cols.add("Id");
+        cols.add("Employee");
+        cols.add("Supplier");
+        cols.add("Total Price");
+        cols.add("Products");
+        cols.add("Date Create");
+        model.setColumnIdentifiers(cols);
+        for (CouponEntity c : dcoup.getAll()) {
+            Vector rows = new Vector();
+            rows.add(c.getId());
+            rows.add(demp.getById(c.getEm_id()).getFullname());
+            rows.add(c.getSupplier_name());
+            rows.add(c.getTotal_price());
+            String pro = "";
+            for (ProductEntity p : dpro.getProByCoupon_id(c.getId())) {
+                pro += p.getName() + " ,";
+            }
+            rows.add(pro.substring(0, pro.length() - 2));
+            rows.add(c.getDate_creat());
+            model.addRow(rows);
+        }
+        couponTable.setModel(model);
     }
 
     /**
@@ -28,37 +98,50 @@ public class CouponList extends javax.swing.JInternalFrame {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
+        search = new javax.swing.JButton();
+        update = new javax.swing.JButton();
+        delete = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        jEditorPane1 = new javax.swing.JEditorPane();
-        jLabel1 = new javax.swing.JLabel();
-        jButton4 = new javax.swing.JButton();
+        couponTable = new javax.swing.JTable();
+        loadPage = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         jScrollPane3 = new javax.swing.JScrollPane();
-        jEditorPane2 = new javax.swing.JEditorPane();
+        id = new javax.swing.JEditorPane();
         jScrollPane4 = new javax.swing.JScrollPane();
-        jEditorPane3 = new javax.swing.JEditorPane();
+        supplier_name = new javax.swing.JEditorPane();
         jScrollPane5 = new javax.swing.JScrollPane();
-        jEditorPane4 = new javax.swing.JEditorPane();
+        total_price = new javax.swing.JEditorPane();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         addProductList = new javax.swing.JButton();
-        jButton6 = new javax.swing.JButton();
+        add = new javax.swing.JButton();
+        msg = new javax.swing.JLabel();
 
-        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resouce/search.png"))); // NOI18N
+        search.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resouce/search.png"))); // NOI18N
+        search.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                searchActionPerformed(evt);
+            }
+        });
 
-        jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resouce/icons8_wrench_30px.png"))); // NOI18N
-        jButton2.setText("Sửa\n");
+        update.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resouce/icons8_wrench_30px.png"))); // NOI18N
+        update.setText("Update");
+        update.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                updateActionPerformed(evt);
+            }
+        });
 
-        jButton3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resouce/icons8_delete_forever_30px_1.png"))); // NOI18N
-        jButton3.setText("Xóa");
+        delete.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resouce/icons8_delete_forever_30px_1.png"))); // NOI18N
+        delete.setText("Xóa");
+        delete.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                deleteActionPerformed(evt);
+            }
+        });
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        couponTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -69,51 +152,62 @@ public class CouponList extends javax.swing.JInternalFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        jScrollPane1.setViewportView(jTable1);
+        couponTable.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                couponTableMouseClicked(evt);
+            }
+        });
+        jScrollPane1.setViewportView(couponTable);
 
-        jScrollPane2.setViewportView(jEditorPane1);
+        loadPage.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resouce/icons8_data_backup_30px.png"))); // NOI18N
+        loadPage.setText("Làm Mới");
+        loadPage.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                loadPageActionPerformed(evt);
+            }
+        });
 
-        jLabel1.setText("Tìm Kiếm");
+        jScrollPane3.setViewportView(id);
 
-        jButton4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resouce/icons8_data_backup_30px.png"))); // NOI18N
-        jButton4.setText("Làm Mới");
+        jScrollPane4.setViewportView(supplier_name);
 
-        jScrollPane3.setViewportView(jEditorPane2);
-
-        jScrollPane4.setViewportView(jEditorPane3);
-
-        jScrollPane5.setViewportView(jEditorPane4);
+        jScrollPane5.setViewportView(total_price);
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
         jLabel2.setText("Mã Đơn");
 
         jLabel3.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
-        jLabel3.setText("Nhà Cung Cấp");
+        jLabel3.setText("Tên nhà Cung Cấp");
 
         jLabel4.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
         jLabel4.setText("Tổng Tiền");
 
         addProductList.setBackground(new java.awt.Color(255, 102, 102));
         addProductList.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
-        addProductList.setText("Thông tin chi sản phẩm");
+        addProductList.setText("Thông tin sản phẩm");
         addProductList.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 addProductListActionPerformed(evt);
             }
         });
 
-        jButton6.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
-        jButton6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resouce/icons8_add_30px.png"))); // NOI18N
-        jButton6.setText("Thêm\n");
+        add.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
+        add.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resouce/icons8_add_30px.png"))); // NOI18N
+        add.setText("Thêm Mới");
+        add.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                addActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(380, 380, 380)
+                .addGap(326, 326, 326)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jButton6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(add, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel2)
@@ -144,49 +238,53 @@ public class CouponList extends javax.swing.JInternalFrame {
                     .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(addProductList, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(38, 38, 38)
-                .addComponent(jButton6, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(95, Short.MAX_VALUE))
+                .addComponent(add, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
+
+        msg.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        msg.setForeground(new java.awt.Color(255, 0, 0));
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(239, 239, 239)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel1)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 214, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(43, 43, 43)
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(34, 34, 34)
-                        .addComponent(jButton4)
-                        .addGap(34, 34, 34)
-                        .addComponent(jButton2)
-                        .addGap(31, 31, 31)
-                        .addComponent(jButton3)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 1127, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(279, 279, 279)
+                        .addComponent(search, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(42, 42, 42)
+                        .addComponent(loadPage)
+                        .addGap(41, 41, 41)
+                        .addComponent(update)
+                        .addGap(39, 39, 39)
+                        .addComponent(delete))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 1074, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(327, 327, 327)
+                        .addComponent(msg, javax.swing.GroupLayout.PREFERRED_SIZE, 400, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addComponent(jLabel1)
-                .addGap(9, 9, 9)
+                .addGap(25, 25, 25)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton2)
-                    .addComponent(jButton3)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton4))
+                    .addComponent(search, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(update)
+                    .addComponent(delete)
+                    .addComponent(loadPage))
                 .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 394, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(50, 50, 50)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 296, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(31, 31, 31)
+                .addComponent(msg, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(81, 81, 81)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -199,40 +297,144 @@ public class CouponList extends javax.swing.JInternalFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void addProductListActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addProductListActionPerformed
-        AddListProductCoupon addpro =  new AddListProductCoupon();
+        pro_coup.setListPro(dpro.getProByCoupon_id(coup_id));
+        AddListProductCoupon addpro = new AddListProductCoupon();
         addpro.setVisible(true);
     }//GEN-LAST:event_addProductListActionPerformed
 
+    private void couponTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_couponTableMouseClicked
+        int index = couponTable.getSelectedRow();
+        String id = (String) couponTable.getValueAt(index, 0);
+        CouponEntity coup = dcoup.getById(id);
+        this.id.setText(id);
+        supplier_name.setText(coup.getSupplier_name());
+        total_price.setText(String.valueOf(coup.getTotal_price()));
+        coup_id = id;
+        msg.setText("");
+        checkChooserPro = true;
+    }//GEN-LAST:event_couponTableMouseClicked
+
+    private void loadPageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loadPageActionPerformed
+        this.loadPage();
+        this.loadCoupon();
+    }//GEN-LAST:event_loadPageActionPerformed
+
+    private void updateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateActionPerformed
+        if (id.getText().equals("") || supplier_name.getText().equals("") || total_price.getText().equals("") || !checkChooserPro) {
+            msg.setText("Vui lòng chọn đơn nhập cần sửa!");
+        } else {
+            if (listPro.size() == 0) {
+                msg.setText("Vui lòng nhập sản phẩm!");
+            } else {
+                CouponEntity coup = dcoup.getById(id.getText());
+                coup.setSupplier_name(supplier_name.getText());
+                coup.setTotal_price(Double.parseDouble(total_price.getText()));
+                dcoup.update(coup, listPro);
+                this.loadPage();
+                this.loadCoupon();
+            }
+        }
+    }//GEN-LAST:event_updateActionPerformed
+
+    private void addActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addActionPerformed
+        if (id.getText().equals("") || supplier_name.getText().equals("") || total_price.getText().equals("")) {
+            msg.setText("Vui lòng điền đầy đủ thông tin!");
+        } else {
+            if (listPro.size() == 0) {
+                msg.setText("Vui lòng nhập sản phẩm!");
+            } else {
+                boolean checkEmpty = false;
+                for (CouponEntity c : dcoup.getAll()) {
+                    if (c.getId().equals(id.getText())) {
+                        checkEmpty = true;
+                        break;
+                    }
+                }
+                if (!checkEmpty) {
+                    CouponEntity coup = new CouponEntity();
+                    coup.setId(id.getText());
+                    coup.setEm_id(this.em.getId());
+                    coup.setSupplier_name(supplier_name.getText());
+                    coup.setTotal_price(Double.parseDouble(total_price.getText()));
+                    dcoup.insert(coup, listPro);
+                    this.loadPage();
+                    this.loadCoupon();
+                } else {
+                    msg.setText("Id đã tồn tại!");
+                }
+            }
+        }
+    }//GEN-LAST:event_addActionPerformed
+
+    private void searchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchActionPerformed
+        String str = JOptionPane.showInputDialog(this, "Nhập tên nhà cung cấp cần tìm: ");
+        DefaultTableModel model = new DefaultTableModel();
+        Vector cols = new Vector();
+        cols.add("Id");
+        cols.add("Employee");
+        cols.add("Supplier");
+        cols.add("Total Price");
+        cols.add("Products");
+        cols.add("Date Create");
+        model.setColumnIdentifiers(cols);
+        for (CouponEntity c : dcoup.search(str)) {
+            Vector rows = new Vector();
+            rows.add(c.getId());
+            rows.add(demp.getById(c.getEm_id()).getFullname());
+            rows.add(c.getSupplier_name());
+            rows.add(c.getTotal_price());
+            String pro = "";
+            for (ProductEntity p : dpro.getProByCoupon_id(c.getId())) {
+                pro += p.getName() + " ,";
+            }
+            rows.add(pro.substring(0, pro.length() - 2));
+            rows.add(c.getDate_creat());
+            model.addRow(rows);
+        }
+        couponTable.setModel(model);
+    }//GEN-LAST:event_searchActionPerformed
+
+    private void deleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteActionPerformed
+        if(id.getText().equals("")) {
+            msg.setText("Vui lòng chọn đơn nhập cần xóa!");
+        } else {
+            int opcion = JOptionPane.showConfirmDialog(this, "Bạn có chắc muốn xóa?", "CẢNH BÁO!", JOptionPane.YES_NO_OPTION);
+            if (opcion == 0) {
+                dcoup.deleteById(id.getText());
+                this.loadPage();
+                this.loadCoupon();
+            }
+        }
+    }//GEN-LAST:event_deleteActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton add;
     private javax.swing.JButton addProductList;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
-    private javax.swing.JButton jButton6;
-    private javax.swing.JEditorPane jEditorPane1;
-    private javax.swing.JEditorPane jEditorPane2;
-    private javax.swing.JEditorPane jEditorPane3;
-    private javax.swing.JEditorPane jEditorPane4;
-    private javax.swing.JLabel jLabel1;
+    private javax.swing.JTable couponTable;
+    private javax.swing.JButton delete;
+    private javax.swing.JEditorPane id;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JScrollPane jScrollPane5;
-    private javax.swing.JTable jTable1;
+    private javax.swing.JButton loadPage;
+    private javax.swing.JLabel msg;
+    private javax.swing.JButton search;
+    private javax.swing.JEditorPane supplier_name;
+    private javax.swing.JEditorPane total_price;
+    private javax.swing.JButton update;
     // End of variables declaration//GEN-END:variables
 }

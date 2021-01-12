@@ -7,8 +7,10 @@ package gui;
 
 import entity.EmployeeEntity;
 import java.net.URISyntaxException;
+
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 import javax.swing.JOptionPane;
 
 /**
@@ -39,7 +41,7 @@ public class FormMain extends javax.swing.JFrame {
             home.setName(em.getFullname());
             accountList = new AccountList();
             productList = new ProductList();
-            coupontList = new CouponList();
+            coupontList = new CouponList(em);
             billList = new BillList();
 
             destop.add(home).setVisible(true);
@@ -52,7 +54,7 @@ public class FormMain extends javax.swing.JFrame {
             home.setName(em.getFullname());
             accountList = new AccountList();
             productList = new ProductList();
-            coupontList = new CouponList();
+            coupontList = new CouponList(em);
             billList = new BillList();
             account.setEnabled(false);
             destop.add(home).setVisible(true);
@@ -61,7 +63,26 @@ public class FormMain extends javax.swing.JFrame {
             destop.add(coupontList);
             destop.add(billList);
         }
+    }
+    public FormMain() throws URISyntaxException {
+        initComponents();
+    }
 
+    public FormMain(EmployeeEntity em) throws URISyntaxException {
+        initComponents();
+        this.em = em;
+        username.setText(em.getFullname());
+        home = new Home();
+        accountList = new AccountList();
+        productList = new ProductList();
+        coupontList = new CouponList(em);
+        billList = new BillList();
+
+        destop.add(home).setVisible(true);
+        destop.add(productList);
+        destop.add(accountList);
+        destop.add(coupontList);
+        destop.add(billList);
     }
 
     /**
@@ -403,9 +424,13 @@ public class FormMain extends javax.swing.JFrame {
     }//GEN-LAST:event_btnShowBillListMouseClicked
 
     private void btnLogoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogoutActionPerformed
-        this.setVisible(false);
-        Login login = new Login();
-        login.setVisible(true);
+    
+        int opcion = JOptionPane.showConfirmDialog(this, "Bạn muốn đăng xuất?", "CẢNH BÁO!", JOptionPane.YES_NO_OPTION);
+        if (opcion == 0) {
+            this.setVisible(false);
+            Login login = new Login();
+            login.setVisible(true);
+        }
     }//GEN-LAST:event_btnLogoutActionPerformed
 
     /**

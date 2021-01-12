@@ -48,6 +48,13 @@ public class ProductEntity {
         this.now_count = now_count;
         this.price = price;
     }
+    
+    public ProductEntity(String name, int cate_id, int old_count, double price) {
+        this.name = name;
+        this.cate_id = cate_id;
+        this.old_count = old_count;
+        this.price = price;
+    }
 
     public int getId() {
         return id;

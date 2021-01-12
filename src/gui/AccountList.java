@@ -12,11 +12,14 @@ import dao.impl.RoleDaoImpl;
 import entity.Em_RoleEntity;
 import entity.EmployeeEntity;
 import entity.RoleEntity;
+import java.net.URISyntaxException;
 import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Vector;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
@@ -521,13 +524,23 @@ public class AccountList extends javax.swing.JInternalFrame {
         if (em_id.getText().equals("")) {
             msg.setText("Vui lòng chọn nhân viên!");
         } else {
-            EmployeeEntity em = demp.getById(Integer.parseInt(em_id.getText()));
-            der.deleteAll(em.getId());
-            demp.deleteById(em.getId());
-            msg.setText("");
-            em_id.setText("");
-            this.loadPage();
-            this.loadAccountList();
+            try {
+                FormMain formMain = new FormMain();
+
+                if (formMain.em.getId() == Integer.parseInt(em_id.getText())) {
+                    msg.setText("Không được xóa tài khoản đang đăng nhập!");
+                } else {
+                    EmployeeEntity em = demp.getById(Integer.parseInt(em_id.getText()));
+                    der.deleteAll(em.getId());
+                    demp.deleteById(em.getId());
+                    msg.setText("");
+                    em_id.setText("");
+                    this.loadPage();
+                    this.loadAccountList();
+                }
+            } catch (URISyntaxException ex) {
+                Logger.getLogger(AccountList.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }//GEN-LAST:event_deleteEmployee1ActionPerformed
 
