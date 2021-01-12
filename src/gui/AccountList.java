@@ -115,6 +115,7 @@ public class AccountList extends javax.swing.JInternalFrame {
         em_id = new javax.swing.JLabel();
         deleteEmployee1 = new javax.swing.JButton();
         close = new javax.swing.JButton();
+        btnLoadPage = new javax.swing.JButton();
 
         tableAccountList.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -204,6 +205,13 @@ public class AccountList extends javax.swing.JInternalFrame {
             }
         });
 
+        btnLoadPage.setText("jButton1");
+        btnLoadPage.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnLoadPageActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -248,7 +256,9 @@ public class AccountList extends javax.swing.JInternalFrame {
                                 .addGap(18, 18, 18)
                                 .addComponent(close)
                                 .addGap(18, 18, 18)
-                                .addComponent(update))
+                                .addComponent(update)
+                                .addGap(18, 18, 18)
+                                .addComponent(btnLoadPage))
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(139, 139, 139)
                                 .addComponent(password1, javax.swing.GroupLayout.PREFERRED_SIZE, 404, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -261,7 +271,7 @@ public class AccountList extends javax.swing.JInternalFrame {
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(37, Short.MAX_VALUE)
+                .addContainerGap(39, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 2, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -269,7 +279,8 @@ public class AccountList extends javax.swing.JInternalFrame {
                             .addComponent(addEmployee)
                             .addComponent(update)
                             .addComponent(deleteEmployee1)
-                            .addComponent(close)))
+                            .addComponent(close)
+                            .addComponent(btnLoadPage, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addComponent(searchEm, javax.swing.GroupLayout.Alignment.TRAILING))
                 .addGap(31, 31, 31)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
@@ -405,6 +416,7 @@ public class AccountList extends javax.swing.JInternalFrame {
     }
 
     private void loadPage() {
+        em_id.setText("");
         fullname.setText("");
         username.setText("");
         password.setText("");
@@ -532,9 +544,14 @@ public class AccountList extends javax.swing.JInternalFrame {
         }
     }//GEN-LAST:event_closeActionPerformed
 
+    private void btnLoadPageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoadPageActionPerformed
+        this.loadPage();
+    }//GEN-LAST:event_btnLoadPageActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton addEmployee;
+    private javax.swing.JButton btnLoadPage;
     private javax.swing.JButton close;
     private javax.swing.JButton deleteEmployee1;
     private javax.swing.JLabel em_id;

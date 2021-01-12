@@ -6,8 +6,12 @@
 package gui;
 
 import dao.impl.DbConnection;
+import dao.impl.Em_RoleDaoImpl;
 import dao.impl.EmployeeDaoImpl;
+import dao.impl.RoleDaoImpl;
+import entity.Em_RoleEntity;
 import entity.EmployeeEntity;
+import entity.RoleEntity;
 import java.awt.Color;
 import java.net.URISyntaxException;
 import java.sql.Connection;
@@ -19,9 +23,10 @@ import java.util.logging.Logger;
  * @author admin
  */
 public class Login extends javax.swing.JFrame {
-    
+
     private EmployeeDaoImpl dempl;
     Connection con;
+    private int checkAdmin = 0;
 
     /**
      * Creates new form Login
@@ -149,22 +154,38 @@ public class Login extends javax.swing.JFrame {
     private void btnLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoginActionPerformed
         try {
             EmployeeEntity em = dempl.checkLogin(username.getText(), password.getText());
+            Em_RoleDaoImpl em_RoleDaoImpl = new Em_RoleDaoImpl(con);
+
             if (em != null) {
-                if(em.isStatus()!= false) {
-                    FormMain formMain  =  new FormMain(em);
-                    this.setVisible(false);
-                    formMain.setVisible(true);
+                if (em.isStatus() != false) {
+                    for (Em_RoleEntity e : em_RoleDaoImpl.getByUser_id(em.getId())) {
+                        if (new RoleDaoImpl(con).getById(e.getRole_id()).getName().equals("ADMIN")) {
+                            //admin
+                            FormMain formMain = new FormMain(em, true);
+                            this.setVisible(false);
+                            formMain.setVisible(true);
+                            this.checkAdmin = 1;
+                            break;
+                        }
+                    }
+                    // em
+                    if (checkAdmin == 0) {
+                        FormMain formMain = new FormMain(em, false);
+                        this.setVisible(false);
+                        formMain.setVisible(true);
+                    }
+
                 } else {
                     msg.setText("Tài khoản bạn bị khóa!");
                 }
             } else {
                 msg.setText("Sai tài khoản hoặc mật khẩu!");
             }
-            
+
         } catch (URISyntaxException ex) {
             Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
     }//GEN-LAST:event_btnLoginActionPerformed
 
     private void passwordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_passwordActionPerformed
@@ -204,7 +225,7 @@ public class Login extends javax.swing.JFrame {
                 new Login().setVisible(true);
             }
         });
-       
+
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

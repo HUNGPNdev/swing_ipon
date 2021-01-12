@@ -9,6 +9,7 @@ import entity.EmployeeEntity;
 import java.net.URISyntaxException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -16,6 +17,7 @@ import java.util.logging.Logger;
  */
 public class FormMain extends javax.swing.JFrame {
 
+    private Boolean checkAdmin = false;
     private Home home;
     private AccountList accountList;
     private ProductList productList;
@@ -26,21 +28,40 @@ public class FormMain extends javax.swing.JFrame {
     /**
      * Creates new form FormMain
      */
-    public FormMain(EmployeeEntity em) throws URISyntaxException {
+    public FormMain(EmployeeEntity em, Boolean checkAdmin) throws URISyntaxException {
+        this.checkAdmin = checkAdmin;
         initComponents();
         this.em = em;
         username.setText(em.getFullname());
-        home = new Home();
-        accountList = new AccountList();
-        productList = new ProductList();
-        coupontList = new CouponList();
-        billList = new BillList();
-        
-        destop.add(home).setVisible(true);
-        destop.add(productList);
-        destop.add(accountList);
-        destop.add(coupontList);
-        destop.add(billList);
+
+        if (checkAdmin) {
+            home = new Home();
+            home.setName(em.getFullname());
+            accountList = new AccountList();
+            productList = new ProductList();
+            coupontList = new CouponList();
+            billList = new BillList();
+
+            destop.add(home).setVisible(true);
+            destop.add(productList);
+            destop.add(accountList);
+            destop.add(coupontList);
+            destop.add(billList);
+        } else {
+            home = new Home();
+            home.setName(em.getFullname());
+            accountList = new AccountList();
+            productList = new ProductList();
+            coupontList = new CouponList();
+            billList = new BillList();
+            account.setEnabled(false);
+            destop.add(home).setVisible(true);
+            destop.add(productList);
+            destop.add(accountList);
+            destop.add(coupontList);
+            destop.add(billList);
+        }
+
     }
 
     /**
@@ -345,11 +366,16 @@ public class FormMain extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void accountMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_accountMouseClicked
-        home.setVisible(false);
-        productList.setVisible(false);
-        coupontList.setVisible(false);
-        billList.setVisible(false);
-        accountList.setVisible(true);
+        if (checkAdmin) {
+            home.setVisible(false);
+            productList.setVisible(false);
+            coupontList.setVisible(false);
+            billList.setVisible(false);
+            accountList.setVisible(true);
+        } else {
+            JOptionPane.showMessageDialog(this,
+                    "Bạn Không Có Quyền Truy Cập");
+        }
     }//GEN-LAST:event_accountMouseClicked
 
     private void productMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_productMouseClicked
@@ -378,7 +404,7 @@ public class FormMain extends javax.swing.JFrame {
 
     private void btnLogoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogoutActionPerformed
         this.setVisible(false);
-        Login login  = new Login();
+        Login login = new Login();
         login.setVisible(true);
     }//GEN-LAST:event_btnLogoutActionPerformed
 

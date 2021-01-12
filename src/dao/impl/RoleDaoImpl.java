@@ -115,4 +115,5 @@ public class RoleDaoImpl implements InterfaceDAO<RoleEntity, Integer>{
         }
         return list;
     }
+    
 }
