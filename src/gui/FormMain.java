@@ -7,6 +7,7 @@ package gui;
 
 import entity.EmployeeEntity;
 import java.net.URISyntaxException;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -27,6 +28,7 @@ public class FormMain extends javax.swing.JFrame {
     public FormMain() throws URISyntaxException {
         initComponents();
     }
+
     public FormMain(EmployeeEntity em) throws URISyntaxException {
         initComponents();
         this.em = em;
@@ -36,7 +38,7 @@ public class FormMain extends javax.swing.JFrame {
         productList = new ProductList();
         coupontList = new CouponList(em);
         billList = new BillList();
-        
+
         destop.add(home).setVisible(true);
         destop.add(productList);
         destop.add(accountList);
@@ -366,7 +368,7 @@ public class FormMain extends javax.swing.JFrame {
         billList.setVisible(false);
         coupontList.setVisible(true);
         accountList.setVisible(false);
-        productList.setVisible(false); 
+        productList.setVisible(false);
     }//GEN-LAST:event_couponShowMouseClicked
 
     private void btnShowBillListMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnShowBillListMouseClicked
@@ -378,9 +380,12 @@ public class FormMain extends javax.swing.JFrame {
     }//GEN-LAST:event_btnShowBillListMouseClicked
 
     private void btnLogoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogoutActionPerformed
-        this.setVisible(false);
-        Login login  = new Login();
-        login.setVisible(true);
+        int opcion = JOptionPane.showConfirmDialog(this, "Bạn muốn đăng xuất?", "CẢNH BÁO!", JOptionPane.YES_NO_OPTION);
+        if (opcion == 0) {
+            this.setVisible(false);
+            Login login = new Login();
+            login.setVisible(true);
+        }
     }//GEN-LAST:event_btnLogoutActionPerformed
 
     /**
