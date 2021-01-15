@@ -7,6 +7,7 @@ package dao.impl;
 
 import dao.InterfaceDAO;
 import entity.CategoryEntity;
+import entity.ProductEntity;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -16,13 +17,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import static org.eclipse.persistence.platform.database.oracle.plsql.OraclePLSQLTypes.Int;
 
 /**
  *
  * @author Lenovo
  */
-public class CategoryDaoImpl implements InterfaceDAO<CategoryEntity, Integer>{
-    
+public class CategoryDaoImpl implements InterfaceDAO<CategoryEntity, Integer> {
+
     private Connection con;
 
     public CategoryDaoImpl(Connection con) {
@@ -31,8 +33,6 @@ public class CategoryDaoImpl implements InterfaceDAO<CategoryEntity, Integer>{
 
     public CategoryDaoImpl() {
     }
-    
-    
 
     @Override
     public List<CategoryEntity> getAll() {
@@ -40,7 +40,7 @@ public class CategoryDaoImpl implements InterfaceDAO<CategoryEntity, Integer>{
         try {
             Statement st = con.createStatement();
             ResultSet rs = st.executeQuery("select * from category");
-            while(rs.next()) {
+            while (rs.next()) {
                 CategoryEntity c = new CategoryEntity(rs.getInt(1), rs.getString(2));
                 list.add(c);
             }
@@ -57,7 +57,7 @@ public class CategoryDaoImpl implements InterfaceDAO<CategoryEntity, Integer>{
             PreparedStatement pst = con.prepareStatement("select * from category where id = ?");
             pst.setInt(1, id);
             ResultSet rs = pst.executeQuery();
-            if(rs.next()) {
+            if (rs.next()) {
                 c = new CategoryEntity(rs.getInt(1), rs.getString(2));
             }
         } catch (SQLException ex) {
@@ -106,9 +106,9 @@ public class CategoryDaoImpl implements InterfaceDAO<CategoryEntity, Integer>{
         List<CategoryEntity> list = new ArrayList<>();
         try {
             PreparedStatement pst = con.prepareStatement("select * from category where name like ?");
-            pst.setString(1, "%"+name+"%");
+            pst.setString(1, "%" + name + "%");
             ResultSet rs = pst.executeQuery();
-            while(rs.next()) {
+            while (rs.next()) {
                 list.add(new CategoryEntity(rs.getInt("id"), rs.getString("name")));
             }
         } catch (SQLException ex) {
@@ -116,5 +116,31 @@ public class CategoryDaoImpl implements InterfaceDAO<CategoryEntity, Integer>{
         }
         return list;
     }
-    
+
+    public int totalCategoryBill() {
+        Boolean check  =  false ;
+        ArrayList<Integer> arrcate = new ArrayList<>();
+        ProductDaoImpl productDaoImpl = new ProductDaoImpl(con);
+        PreparedStatement pst;
+        try {
+            pst = con.prepareStatement("SELECT * FROM pro_bill");
+            ResultSet rs = pst.executeQuery();
+            while (rs.next()) {
+                for (Integer i : arrcate) {
+                    if (i == productDaoImpl.getById(rs.getInt(1)).getCate_id()) {
+                        check  = true;
+                        break;
+                    }
+                }
+                if(!check){
+                    arrcate.add(productDaoImpl.getById(rs.getInt(1)).getCate_id());
+                }else {
+                    check = false;
+                }
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(EmployeeDaoImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return arrcate.size();
+    }
 }

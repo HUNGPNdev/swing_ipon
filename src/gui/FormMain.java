@@ -25,6 +25,9 @@ public class FormMain extends javax.swing.JFrame {
     private ProductList productList;
     private CouponList coupontList;
     private BillList billList;
+    private CategoryList categoryList;
+    private Statistic statistic;
+    private RoleList roleList;
     public static EmployeeEntity em = null;
 
     /**
@@ -41,29 +44,43 @@ public class FormMain extends javax.swing.JFrame {
             home.setName(em.getFullname());
             accountList = new AccountList();
             productList = new ProductList();
+            roleList = new RoleList();
             coupontList = new CouponList(em);
             billList = new BillList();
+            categoryList = new CategoryList();
+            statistic = new Statistic();
 
             destop.add(home).setVisible(true);
             destop.add(productList);
             destop.add(accountList);
             destop.add(coupontList);
             destop.add(billList);
+            destop.add(categoryList);
+            destop.add(roleList);
+            destop.add(statistic);
         } else {
             home = new Home();
             home.setName(em.getFullname());
             accountList = new AccountList();
+            roleList = new RoleList();
             productList = new ProductList();
             coupontList = new CouponList(em);
             billList = new BillList();
             account.setEnabled(false);
+            categoryList = new CategoryList();
+            statistic = new Statistic();
+
             destop.add(home).setVisible(true);
             destop.add(productList);
             destop.add(accountList);
             destop.add(coupontList);
             destop.add(billList);
+            destop.add(roleList);
+            destop.add(categoryList);
+            destop.add(statistic);
         }
     }
+
     public FormMain() throws URISyntaxException {
         initComponents();
     }
@@ -77,12 +94,18 @@ public class FormMain extends javax.swing.JFrame {
         productList = new ProductList();
         coupontList = new CouponList(em);
         billList = new BillList();
+        categoryList = new CategoryList();
+        roleList = new RoleList();
+        statistic = new Statistic();
 
         destop.add(home).setVisible(true);
         destop.add(productList);
         destop.add(accountList);
         destop.add(coupontList);
         destop.add(billList);
+        destop.add(categoryList);
+        destop.add(roleList);
+        destop.add(statistic);
     }
 
     /**
@@ -101,7 +124,7 @@ public class FormMain extends javax.swing.JFrame {
         username = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
+        btnStore = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
         product = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
@@ -115,9 +138,9 @@ public class FormMain extends javax.swing.JFrame {
         jLabel16 = new javax.swing.JLabel();
         account = new javax.swing.JLabel();
         jLabel18 = new javax.swing.JLabel();
-        jLabel19 = new javax.swing.JLabel();
+        btnRoleList = new javax.swing.JLabel();
         jSeparator5 = new javax.swing.JSeparator();
-        jLabel17 = new javax.swing.JLabel();
+        btnCategoryList = new javax.swing.JLabel();
         jLabel20 = new javax.swing.JLabel();
         jLabel21 = new javax.swing.JLabel();
         btnShowBillList = new javax.swing.JLabel();
@@ -182,9 +205,14 @@ public class FormMain extends javax.swing.JFrame {
 
         jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resouce/icons8_small_business_30px_3.png"))); // NOI18N
 
-        jLabel5.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jLabel5.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel5.setText("Cửa Hàng");
+        btnStore.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        btnStore.setForeground(new java.awt.Color(255, 255, 255));
+        btnStore.setText("Cửa Hàng");
+        btnStore.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnStoreMouseClicked(evt);
+            }
+        });
 
         jLabel8.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resouce/icons8_truck_30px.png"))); // NOI18N
 
@@ -227,13 +255,23 @@ public class FormMain extends javax.swing.JFrame {
 
         jLabel18.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resouce/icons8_police_badge_30px.png"))); // NOI18N
 
-        jLabel19.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jLabel19.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel19.setText("Quyền");
+        btnRoleList.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        btnRoleList.setForeground(new java.awt.Color(255, 255, 255));
+        btnRoleList.setText("Quyền");
+        btnRoleList.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnRoleListMouseClicked(evt);
+            }
+        });
 
-        jLabel17.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jLabel17.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel17.setText("Loại Sản Phẩm");
+        btnCategoryList.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        btnCategoryList.setForeground(new java.awt.Color(255, 255, 255));
+        btnCategoryList.setText("Loại Sản Phẩm");
+        btnCategoryList.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnCategoryListMouseClicked(evt);
+            }
+        });
 
         jLabel20.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resouce/icons8_dossier_folder_30px.png"))); // NOI18N
 
@@ -264,7 +302,7 @@ public class FormMain extends javax.swing.JFrame {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jLabel5)
+                        .addComponent(btnStore)
                         .addContainerGap())
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGap(18, 18, 18)
@@ -279,7 +317,7 @@ public class FormMain extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(product, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel17, javax.swing.GroupLayout.DEFAULT_SIZE, 134, Short.MAX_VALUE)
+                    .addComponent(btnCategoryList, javax.swing.GroupLayout.DEFAULT_SIZE, 134, Short.MAX_VALUE)
                     .addComponent(btnShowBillList, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGap(31, 31, 31)
@@ -291,7 +329,7 @@ public class FormMain extends javax.swing.JFrame {
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(jLabel18)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jLabel19, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                        .addComponent(btnRoleList, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGap(32, 32, 32)
                 .addComponent(jLabel15)
@@ -303,7 +341,7 @@ public class FormMain extends javax.swing.JFrame {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnStore, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, 46, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 5, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -314,7 +352,7 @@ public class FormMain extends javax.swing.JFrame {
                 .addGap(16, 16, 16)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel20)
-                    .addComponent(jLabel17, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btnCategoryList, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGap(16, 16, 16)
@@ -339,7 +377,7 @@ public class FormMain extends javax.swing.JFrame {
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(account, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGap(18, 18, 18)
-                        .addComponent(jLabel19, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(btnRoleList, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(jLabel16, javax.swing.GroupLayout.DEFAULT_SIZE, 46, Short.MAX_VALUE)
                         .addGap(18, 18, 18)
@@ -392,7 +430,10 @@ public class FormMain extends javax.swing.JFrame {
             productList.setVisible(false);
             coupontList.setVisible(false);
             billList.setVisible(false);
+            categoryList.setVisible(false);
+            roleList.setVisible(false);
             accountList.setVisible(true);
+            statistic.setVisible(false);
         } else {
             JOptionPane.showMessageDialog(this,
                     "Bạn Không Có Quyền Truy Cập");
@@ -404,7 +445,10 @@ public class FormMain extends javax.swing.JFrame {
         billList.setVisible(false);
         coupontList.setVisible(false);
         accountList.setVisible(false);
+        categoryList.setVisible(false);
+        roleList.setVisible(false);
         productList.setVisible(true);
+        statistic.setVisible(false);
     }//GEN-LAST:event_productMouseClicked
 
     private void couponShowMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_couponShowMouseClicked
@@ -412,19 +456,25 @@ public class FormMain extends javax.swing.JFrame {
         billList.setVisible(false);
         coupontList.setVisible(true);
         accountList.setVisible(false);
+        roleList.setVisible(false);
+        categoryList.setVisible(false);
         productList.setVisible(false);
+        statistic.setVisible(false);
     }//GEN-LAST:event_couponShowMouseClicked
 
     private void btnShowBillListMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnShowBillListMouseClicked
         home.setVisible(false);
         billList.setVisible(true);
+        roleList.setVisible(false);
         coupontList.setVisible(false);
         accountList.setVisible(false);
+        categoryList.setVisible(false);
         productList.setVisible(false);
+        statistic.setVisible(false);
     }//GEN-LAST:event_btnShowBillListMouseClicked
 
     private void btnLogoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogoutActionPerformed
-    
+
         int opcion = JOptionPane.showConfirmDialog(this, "Bạn muốn đăng xuất?", "CẢNH BÁO!", JOptionPane.YES_NO_OPTION);
         if (opcion == 0) {
             this.setVisible(false);
@@ -433,6 +483,38 @@ public class FormMain extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btnLogoutActionPerformed
 
+    private void btnCategoryListMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCategoryListMouseClicked
+        home.setVisible(false);
+        billList.setVisible(false);
+        roleList.setVisible(false);
+        coupontList.setVisible(false);
+        accountList.setVisible(false);
+        categoryList.setVisible(true);
+        productList.setVisible(false);
+        statistic.setVisible(false);
+    }//GEN-LAST:event_btnCategoryListMouseClicked
+
+    private void btnRoleListMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnRoleListMouseClicked
+        home.setVisible(false);
+        billList.setVisible(false);
+        roleList.setVisible(true);
+        coupontList.setVisible(false);
+        accountList.setVisible(false);
+        categoryList.setVisible(false);
+        productList.setVisible(false);
+        statistic.setVisible(false);
+    }//GEN-LAST:event_btnRoleListMouseClicked
+
+    private void btnStoreMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnStoreMouseClicked
+        home.setVisible(false);
+        billList.setVisible(false);
+        roleList.setVisible(false);
+        coupontList.setVisible(false);
+        accountList.setVisible(false);
+        categoryList.setVisible(false);
+        productList.setVisible(false);
+        statistic.setVisible(true);
+    }//GEN-LAST:event_btnStoreMouseClicked
     /**
      * @param args the command line arguments
      */
@@ -473,8 +555,11 @@ public class FormMain extends javax.swing.JFrame {
 //    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel account;
+    private javax.swing.JLabel btnCategoryList;
     private javax.swing.JButton btnLogout;
+    private javax.swing.JLabel btnRoleList;
     private javax.swing.JLabel btnShowBillList;
+    private javax.swing.JLabel btnStore;
     private javax.swing.JLabel couponShow;
     private javax.swing.JDesktopPane destop;
     private javax.swing.JLabel jLabel1;
@@ -482,14 +567,11 @@ public class FormMain extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel16;
-    private javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel18;
-    private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel20;
     private javax.swing.JLabel jLabel21;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;

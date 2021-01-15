@@ -139,4 +139,75 @@ public class CouponDaoImpl implements CouponDAO<CouponEntity, String> {
         return list;
     }
 
+    public int totalCoupon() {
+        PreparedStatement pst;
+        int tong = 0;
+        try {
+            pst = con.prepareStatement("SELECT COUNT(*) FROM coupon");
+            ResultSet rs = pst.executeQuery();
+            while (rs.next()) {
+                tong = rs.getInt(1);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(EmployeeDaoImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return tong;
+    }
+
+    public int totalProCoupon() {
+        PreparedStatement pst;
+        int tong = 0;
+        try {
+            pst = con.prepareStatement("SELECT * FROM product");
+            ResultSet rs = pst.executeQuery();
+            while (rs.next()) {
+                tong = rs.getInt(4);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(EmployeeDaoImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return tong;
+    }
+
+    public int totalMoneyCoupon() {
+        PreparedStatement pst;
+        int tong = 0;
+        try {
+            pst = con.prepareStatement("SELECT * FROM coupon");
+            ResultSet rs = pst.executeQuery();
+            while (rs.next()) {
+                tong = rs.getInt(4);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(EmployeeDaoImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return tong;
+    }
+
+    public int totalCateCoupon() {
+        Boolean check = false;
+        ArrayList<Integer> arrcate = new ArrayList<>();
+        ProductDaoImpl productDaoImpl = new ProductDaoImpl(con);
+        PreparedStatement pst;
+        try {
+            pst = con.prepareStatement("SELECT * FROM product");
+            ResultSet rs = pst.executeQuery();
+            while (rs.next()) {
+                for (Integer i : arrcate) {
+                    if (i ==  rs.getInt("cate_id")) {
+                        check = true;
+                        break;
+                    }
+                }
+                if (!check) {
+                    arrcate.add(rs.getInt("cate_id"));
+                } else {
+                    check = false;
+                }
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(EmployeeDaoImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return arrcate.size();
+    }
 }
