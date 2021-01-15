@@ -42,7 +42,7 @@ public class FormMain extends javax.swing.JFrame {
             accountList = new AccountList();
             productList = new ProductList();
             coupontList = new CouponList(em);
-            billList = new BillList();
+            billList = new BillList(em);
 
             destop.add(home).setVisible(true);
             destop.add(productList);

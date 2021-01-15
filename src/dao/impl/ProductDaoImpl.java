@@ -86,7 +86,7 @@ public class ProductDaoImpl implements InterfaceDAO<ProductEntity, Integer>{
             pst.setString(1, t.getName());
             pst.setInt(2, t.getCate_id());
             pst.setInt(3, t.getOld_count());
-            pst.setInt(4, t.getNow_count());
+            pst.setInt(4, t.getOld_count());
             pst.setDouble(5, t.getPrice());
             pst.setString(6, t.getCou_id());
             pst.executeUpdate();
@@ -111,6 +111,19 @@ public class ProductDaoImpl implements InterfaceDAO<ProductEntity, Integer>{
             Logger.getLogger(ProductDaoImpl.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+    
+    public void updateCount(int pro_id, int count) {
+        try {
+            ProductEntity p = this.getById(pro_id);
+            p.setNow_count(p.getNow_count() - count);
+            PreparedStatement pst =  con.prepareStatement("update product set now_count=? where id=?");
+            pst.setInt(2, pro_id);
+            pst.setInt(1, p.getNow_count());
+            pst.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(ProductDaoImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 
     @Override
     public void deleteById(Integer id) {
@@ -128,6 +141,7 @@ public class ProductDaoImpl implements InterfaceDAO<ProductEntity, Integer>{
         List<ProductEntity> list = new ArrayList<>();
         try {
             PreparedStatement pst = con.prepareStatement("select * from product where name like ?");
+            pst.setString(1, "%"+name+"%");
             ResultSet rs = pst.executeQuery();
             while(rs.next()) {
                 list.add(new ProductEntity(rs.getInt(1), rs.getString(2),rs.getInt(3),rs.getInt(4),rs.getInt(5),rs.getDouble(6),rs.getString(7)));
