@@ -5,6 +5,24 @@
  */
 package gui;
 
+import dao.impl.BillDaoImpl;
+import dao.impl.DbConnection;
+import dao.impl.EmployeeDaoImpl;
+import dao.impl.Pro_billDaoImpl;
+import dao.impl.Pro_coupDAOImpl;
+import dao.impl.ProductDaoImpl;
+import entity.BillEntity;
+import entity.Bill_proEntity;
+import entity.EmployeeEntity;
+import java.sql.Connection;
+import java.util.Vector;
+import javax.swing.table.DefaultTableModel;
+import static dao.impl.Pro_coupDAOImpl.*;
+import entity.Pro_id_count;
+import java.util.ArrayList;
+import java.util.List;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author admin
@@ -14,8 +32,70 @@ public class BillList extends javax.swing.JInternalFrame {
     /**
      * Creates new form BillList
      */
+    private EmployeeEntity em;
+    private BillDaoImpl dbill;
+    private Connection con;
+    private EmployeeDaoImpl demp;
+    private Pro_billDaoImpl dpb;
+    private ProductDaoImpl dpro;
+    private int idBill;
+    private String clName;
+    private Pro_coupDAOImpl pro_coup = new Pro_coupDAOImpl();
+
+    public BillList(EmployeeEntity em) {
+        initComponents();
+        this.em = em;
+        con = DbConnection.getConnect();
+        dbill = new BillDaoImpl(con);
+        demp = new EmployeeDaoImpl(con);
+        dpb = new Pro_billDaoImpl(con);
+        dpro = new ProductDaoImpl(con);
+        this.loadPage();
+        this.loadBill();
+    }
+
     public BillList() {
         initComponents();
+    }
+
+    private void loadPage() {
+        id.setText("");
+        clientName.setText("");
+        total_price.setText("");
+        msg.setText("");
+        clName = "";
+        idBill = 0;
+    }
+
+    private void loadBill() {
+        DefaultTableModel model = new DefaultTableModel();
+        Vector cols = new Vector();
+        cols.add("Id");
+        cols.add("Employee");
+        cols.add("Client Name");
+        cols.add("Total Price");
+        cols.add("Products");
+        cols.add("Date Create");
+        model.setColumnIdentifiers(cols);
+        for (BillEntity b : dbill.getAll()) {
+            Vector rows = new Vector();
+            rows.add(b.getId());
+            rows.add(demp.getById(b.getEm_id()).getUsername());
+            rows.add(b.getClient_name());
+            rows.add(b.getTotal_price());
+            String proname = "";
+            if (dpb.getByBill_Id(b.getId()).size() != 0) {
+                for (Bill_proEntity d : dpb.getByBill_Id(b.getId())) {
+                    proname += dpro.getById(d.getPro_id()).getName() + " ,";
+                }
+                rows.add(proname.substring(0, proname.length() - 2));
+            } else {
+                rows.add(proname);
+            }
+            rows.add(b.getDate_create());
+            model.addRow(rows);
+        }
+        billTable.setModel(model);
     }
 
     /**
@@ -28,48 +108,54 @@ public class BillList extends javax.swing.JInternalFrame {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
-        jLabel1 = new javax.swing.JLabel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        jEditorPane1 = new javax.swing.JEditorPane();
-        jButton1 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
+        update = new javax.swing.JButton();
+        delete = new javax.swing.JButton();
+        loadpage = new javax.swing.JButton();
+        search = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        billTable = new javax.swing.JTable();
         jLabel2 = new javax.swing.JLabel();
-        jScrollPane3 = new javax.swing.JScrollPane();
-        jEditorPane2 = new javax.swing.JEditorPane();
-        jScrollPane4 = new javax.swing.JScrollPane();
-        jEditorPane3 = new javax.swing.JEditorPane();
         jLabel3 = new javax.swing.JLabel();
-        aaa = new javax.swing.JButton();
+        btnAdd = new javax.swing.JButton();
         jLabel4 = new javax.swing.JLabel();
-        jScrollPane5 = new javax.swing.JScrollPane();
-        jEditorPane4 = new javax.swing.JEditorPane();
         btnAddpro = new javax.swing.JButton();
+        msg = new javax.swing.JLabel();
+        clientName = new javax.swing.JTextField();
+        id = new javax.swing.JLabel();
+        total_price = new javax.swing.JLabel();
 
-        jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resouce/icons8_wrench_30px.png"))); // NOI18N
-        jButton2.setText("Sửa\n");
-
-        jButton3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resouce/icons8_delete_forever_30px_1.png"))); // NOI18N
-        jButton3.setText("Xóa\n");
-
-        jLabel1.setText("Tìm Kiếm");
-
-        jScrollPane1.setViewportView(jEditorPane1);
-
-        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resouce/icons8_data_backup_30px.png"))); // NOI18N
-        jButton1.setText("Làm Mới");
-
-        jButton4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resouce/search.png"))); // NOI18N
-        jButton4.addActionListener(new java.awt.event.ActionListener() {
+        update.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resouce/icons8_wrench_30px.png"))); // NOI18N
+        update.setText("Update");
+        update.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton4ActionPerformed(evt);
+                updateActionPerformed(evt);
             }
         });
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        delete.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resouce/icons8_delete_forever_30px_1.png"))); // NOI18N
+        delete.setText("Xóa ");
+        delete.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                deleteActionPerformed(evt);
+            }
+        });
+
+        loadpage.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resouce/icons8_data_backup_30px.png"))); // NOI18N
+        loadpage.setText("Làm Mới");
+        loadpage.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                loadpageActionPerformed(evt);
+            }
+        });
+
+        search.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resouce/search.png"))); // NOI18N
+        search.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                searchActionPerformed(evt);
+            }
+        });
+
+        billTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -80,30 +166,29 @@ public class BillList extends javax.swing.JInternalFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        jScrollPane2.setViewportView(jTable1);
+        billTable.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                billTableMouseClicked(evt);
+            }
+        });
+        jScrollPane2.setViewportView(billTable);
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
         jLabel2.setText("Mã Hóa Đơn");
 
-        jScrollPane3.setViewportView(jEditorPane2);
-
-        jScrollPane4.setViewportView(jEditorPane3);
-
         jLabel3.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
         jLabel3.setText("Tên Khách Hàng");
 
-        aaa.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resouce/icons8_add_30px.png"))); // NOI18N
-        aaa.setText("Thêm");
-        aaa.addActionListener(new java.awt.event.ActionListener() {
+        btnAdd.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resouce/icons8_add_30px.png"))); // NOI18N
+        btnAdd.setText("Thêm mới");
+        btnAdd.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                aaaActionPerformed(evt);
+                btnAddActionPerformed(evt);
             }
         });
 
         jLabel4.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
         jLabel4.setText("Tổng Tiền");
-
-        jScrollPane5.setViewportView(jEditorPane4);
 
         btnAddpro.setBackground(new java.awt.Color(255, 102, 102));
         btnAddpro.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
@@ -114,6 +199,9 @@ public class BillList extends javax.swing.JInternalFrame {
             }
         });
 
+        msg.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        msg.setForeground(new java.awt.Color(255, 0, 0));
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -122,72 +210,64 @@ public class BillList extends javax.swing.JInternalFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(235, 235, 235)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel1)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 209, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(30, 30, 30)
-                                .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(30, 30, 30)
-                                .addComponent(jButton1)
-                                .addGap(52, 52, 52)
-                                .addComponent(jButton2)
-                                .addGap(38, 38, 38)
-                                .addComponent(jButton3))))
+                        .addGap(259, 259, 259)
+                        .addComponent(search, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(90, 90, 90)
+                        .addComponent(loadpage)
+                        .addGap(70, 70, 70)
+                        .addComponent(update)
+                        .addGap(82, 82, 82)
+                        .addComponent(delete))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(355, 355, 355)
+                        .addGap(363, 363, 363)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(aaa, javax.swing.GroupLayout.PREFERRED_SIZE, 485, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 485, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                    .addComponent(btnAddpro, javax.swing.GroupLayout.DEFAULT_SIZE, 170, Short.MAX_VALUE)
-                                    .addComponent(jScrollPane3)
-                                    .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.LEADING))
-                                .addGap(148, 148, 148)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 167, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                        .addComponent(btnAddpro, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.LEADING))
+                                    .addComponent(id, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(142, 142, 142)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                     .addComponent(jLabel3)
-                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(jLabel4)
-                                        .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 167, javax.swing.GroupLayout.PREFERRED_SIZE)))))))
-                .addContainerGap(130, Short.MAX_VALUE))
+                                    .addComponent(jLabel4)
+                                    .addComponent(clientName, javax.swing.GroupLayout.DEFAULT_SIZE, 167, Short.MAX_VALUE)
+                                    .addComponent(total_price, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                            .addComponent(msg, javax.swing.GroupLayout.PREFERRED_SIZE, 479, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addContainerGap(181, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(34, 34, 34)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(34, 34, 34)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jButton1)
-                            .addComponent(jButton3)
-                            .addComponent(jButton2)
-                            .addComponent(jButton4)))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jLabel1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(search)
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(loadpage)
+                        .addComponent(delete)
+                        .addComponent(update)))
                 .addGap(31, 31, 31)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 356, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(23, 23, 23)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 306, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 61, Short.MAX_VALUE)
+                .addComponent(msg, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(31, 31, 31)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2)
-                    .addComponent(jLabel3))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 8, Short.MAX_VALUE)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 34, Short.MAX_VALUE)
-                    .addComponent(jScrollPane4))
-                .addGap(9, 9, 9)
+                    .addComponent(jLabel3)
+                    .addComponent(jLabel2))
+                .addGap(7, 7, 7)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(clientName, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(id, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(6, 6, 6)
                 .addComponent(jLabel4)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(btnAddpro, javax.swing.GroupLayout.DEFAULT_SIZE, 36, Short.MAX_VALUE)
-                    .addComponent(jScrollPane5))
-                .addGap(28, 28, 28)
-                .addComponent(aaa, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(116, Short.MAX_VALUE))
+                    .addComponent(total_price, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(33, 33, 33)
+                .addComponent(btnAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(87, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -204,41 +284,162 @@ public class BillList extends javax.swing.JInternalFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton4ActionPerformed
+    private void searchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchActionPerformed
+        String str = JOptionPane.showInputDialog(this, "Nhập tên khách hàng cần tìm: ");
+        DefaultTableModel model = new DefaultTableModel();
+        Vector cols = new Vector();
+        cols.add("Id");
+        cols.add("Employee");
+        cols.add("Client Name");
+        cols.add("Total Price");
+        cols.add("Products");
+        cols.add("Date Create");
+        model.setColumnIdentifiers(cols);
+        for (BillEntity b : dbill.search(str)) {
+            Vector rows = new Vector();
+            rows.add(b.getId());
+            rows.add(demp.getById(b.getEm_id()).getUsername());
+            rows.add(b.getClient_name());
+            rows.add(b.getTotal_price());
+            String proname = "";
+            if (dpb.getByBill_Id(b.getId()).size() != 0) {
+                for (Bill_proEntity d : dpb.getByBill_Id(b.getId())) {
+                    proname += dpro.getById(d.getPro_id()).getName() + " ,";
+                }
+                rows.add(proname.substring(0, proname.length() - 2));
+            } else {
+                rows.add(proname);
+            }
+            rows.add(b.getDate_create());
+            model.addRow(rows);
+        }
+        billTable.setModel(model);
+    }//GEN-LAST:event_searchActionPerformed
 
-    private void aaaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_aaaActionPerformed
-
-    }//GEN-LAST:event_aaaActionPerformed
+    private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
+        if (id.getText().equals("")) {
+            if (clientName.getText().equals("")) {
+                msg.setText("Vui lòng điền tên khách hàng!");
+            } else {
+                if (pro_id_count.size() > 0) {
+                    for (int i = 0; i < pro_id_count.size(); i++) {
+                        if (pro_id_count.get(i).getCount() == 0) {
+                            pro_id_count.remove(i);
+                            i--;
+                        }
+                    }
+                    if (pro_id_count.size() > 0) {
+                        System.out.println(pro_id_count);
+                        BillEntity bill = new BillEntity();
+                        bill.setEm_id(em.getId());
+                        bill.setClient_name(clientName.getText());
+                        dbill.insert(bill, pro_id_count);
+                        int idheightest = dbill.getMaxId();
+                        for (Pro_id_count p : pro_id_count) {
+                            dpb.insert(new Bill_proEntity(p.getPro_id(), idheightest, p.getCount()));
+                            dpro.updateCount(p.getPro_id(), p.getCount());
+                        }
+                        this.loadPage();
+                        this.loadBill();
+                    } else {
+                        msg.setText("Vui lòng thêm sản phẩm!");
+                    }
+                } else {
+                    msg.setText("Vui lòng thêm sản phẩm!");
+                }
+            }
+        } else {
+            msg.setText("Vui lòng load lại trang và nhập lại!");
+        }
+    }//GEN-LAST:event_btnAddActionPerformed
 
     private void btnAddproActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddproActionPerformed
-        AddListProductCoupon addpro = new AddListProductCoupon();
+        msg.setText("");
+        pro_coup.setListProByBill_id(dpb.getByBill_Id(idBill));
+        ProBill_Frm addpro = new ProBill_Frm();
         addpro.setVisible(true);
     }//GEN-LAST:event_btnAddproActionPerformed
 
+    private void billTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_billTableMouseClicked
+        int index = billTable.getSelectedRow();
+        int id = (Integer) billTable.getValueAt(index, 0);
+        idBill = id;
+        msg.setText("");
+        BillEntity b = dbill.getById(id);
+        this.id.setText(String.valueOf(b.getId()));
+        clientName.setText(b.getClient_name());
+        clName = b.getClient_name();
+        total_price.setText(String.valueOf(b.getTotal_price()));
+    }//GEN-LAST:event_billTableMouseClicked
+
+    private void loadpageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loadpageActionPerformed
+        this.loadPage();
+        this.loadBill();
+    }//GEN-LAST:event_loadpageActionPerformed
+
+    private void updateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateActionPerformed
+        if (id.getText().equals("") || clientName.getText().equals("") || total_price.getText().equals("")) {
+            msg.setText("Vui lòng điền đầy đủ thông tin!");
+        } else {
+            boolean checkCh = false;
+            if (pro_id_count.size() > 0) {
+                checkCh = true;
+            } else if(!clientName.getText().equals(clName)) {
+                checkCh = true;
+            }
+            if (checkCh) {
+                int id = Integer.parseInt(this.id.getText());
+                for (Pro_id_count p : pro_id_count) {
+                    Bill_proEntity bpe = new Bill_proEntity(p.getPro_id(), id, p.getCount());
+                    if (this.dpb.getByBillPro(bpe) == null) {
+                        this.dpb.insert(bpe);
+                    } else {
+                        this.dpb.update(bpe);
+                    }
+                    dpro.updateCount(p.getPro_id(), p.getCount());
+                }
+                BillEntity billEntity = dbill.getById(id);
+                billEntity.setClient_name(clientName.getText());
+                dbill.update(billEntity);
+                this.loadPage();
+                this.loadBill();
+            } else {
+                msg.setText("Không có gì để update!");
+            }
+        }
+    }//GEN-LAST:event_updateActionPerformed
+
+    private void deleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteActionPerformed
+        if(id.getText().equals("")) {
+            msg.setText("Vui lòng chọn đơn hàng cần xóa!");
+        } else {
+            int opcion = JOptionPane.showConfirmDialog(this, "Bạn có chắc muốn xóa?", "CẢNH BÁO!", JOptionPane.YES_NO_OPTION);
+            if (opcion == 0) {
+                dpb.delete(Integer.parseInt(id.getText()));
+                dbill.deleteById(Integer.parseInt(id.getText()));
+                this.loadPage();
+                this.loadBill();
+            }
+        }
+    }//GEN-LAST:event_deleteActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton aaa;
+    private javax.swing.JTable billTable;
+    private javax.swing.JButton btnAdd;
     private javax.swing.JButton btnAddpro;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
-    private javax.swing.JEditorPane jEditorPane1;
-    private javax.swing.JEditorPane jEditorPane2;
-    private javax.swing.JEditorPane jEditorPane3;
-    private javax.swing.JEditorPane jEditorPane4;
-    private javax.swing.JLabel jLabel1;
+    private javax.swing.JTextField clientName;
+    private javax.swing.JButton delete;
+    private javax.swing.JLabel id;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JScrollPane jScrollPane3;
-    private javax.swing.JScrollPane jScrollPane4;
-    private javax.swing.JScrollPane jScrollPane5;
-    private javax.swing.JTable jTable1;
+    private javax.swing.JButton loadpage;
+    private javax.swing.JLabel msg;
+    private javax.swing.JButton search;
+    private javax.swing.JLabel total_price;
+    private javax.swing.JButton update;
     // End of variables declaration//GEN-END:variables
 }

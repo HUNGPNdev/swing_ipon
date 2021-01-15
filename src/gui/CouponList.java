@@ -36,12 +36,10 @@ public class CouponList extends javax.swing.JInternalFrame {
     public static List<ProductEntity> listProByCou_Id = null;
     public static String coup_id = null;
     public Pro_coupDAOImpl pro_coup = new Pro_coupDAOImpl();
-    
 
     /**
      * Creates new form CouponList
      */
-    
     public CouponList(EmployeeEntity em) {
         initComponents();
         this.em = em;
@@ -58,6 +56,7 @@ public class CouponList extends javax.swing.JInternalFrame {
         total_price.setText("");
         msg.setText("");
         coup_id = null;
+        listPro = null;
         checkChooserPro = false;
     }
 
@@ -78,10 +77,14 @@ public class CouponList extends javax.swing.JInternalFrame {
             rows.add(c.getSupplier_name());
             rows.add(c.getTotal_price());
             String pro = "";
-            for (ProductEntity p : dpro.getProByCoupon_id(c.getId())) {
-                pro += p.getName() + " ,";
+            if (dpro.getProByCoupon_id(c.getId()).size() != 0) {
+                for (ProductEntity p : dpro.getProByCoupon_id(c.getId())) {
+                    pro += p.getName() + " ,";
+                }
+                rows.add(pro.substring(0, pro.length() - 2));
+            } else {
+                rows.add(pro);
             }
-            rows.add(pro.substring(0, pro.length() - 2));
             rows.add(c.getDate_creat());
             model.addRow(rows);
         }
@@ -403,7 +406,7 @@ public class CouponList extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_searchActionPerformed
 
     private void deleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteActionPerformed
-        if(id.getText().equals("")) {
+        if (id.getText().equals("")) {
             msg.setText("Vui lòng chọn đơn nhập cần xóa!");
         } else {
             int opcion = JOptionPane.showConfirmDialog(this, "Bạn có chắc muốn xóa?", "CẢNH BÁO!", JOptionPane.YES_NO_OPTION);

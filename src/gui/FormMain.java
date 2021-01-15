@@ -46,6 +46,7 @@ public class FormMain extends javax.swing.JFrame {
             productList = new ProductList();
             roleList = new RoleList();
             coupontList = new CouponList(em);
+
             billList = new BillList();
             categoryList = new CategoryList();
             statistic = new Statistic();

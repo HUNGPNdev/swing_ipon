@@ -27,11 +27,8 @@ public class Test {
      */
     public static void main(String[] args) {
         Connection con = DbConnection.getConnect();
-        CouponDaoImpl coup = new CouponDaoImpl(con);
-//        CouponEntity c = coup.getById("1");
-//        c.setTotal_price(2222);
-//        System.out.println(c);
-System.out.println(coup.getAll());
+        BillDaoImpl bill = new BillDaoImpl(con);
+        System.out.println(bill.getMaxId());;
     }
     
 }
