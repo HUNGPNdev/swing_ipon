@@ -48,8 +48,10 @@ create table bill (
     constraint Pk_Bill_Em foreign key(em_id) references employee(id)
 );
 create table pro_bill (
+	id int primary key auto_increment,
 	pro_id int,
     bill_id int,
+    count int,
     constraint Pk_pro_bill_pro foreign key(pro_id) references product(id),
     constraint Pk_bill_pro_bill foreign key(bill_id) references bill(id)
 );

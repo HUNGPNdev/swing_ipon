@@ -7,12 +7,16 @@ package dao.impl;
 
 import dao.InterfaceDAO;
 import entity.BillEntity;
+import entity.Bill_proEntity;
+import entity.Pro_id_count;
+import entity.ProductEntity;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -21,7 +25,7 @@ import java.util.logging.Logger;
  *
  * @author Lenovo
  */
-public class BillDaoImpl implements InterfaceDAO<BillEntity, Integer>{
+public class BillDaoImpl{
     
     private Connection con;
 
@@ -32,7 +36,6 @@ public class BillDaoImpl implements InterfaceDAO<BillEntity, Integer>{
     public BillDaoImpl() {
     }
     
-    @Override
     public List<BillEntity> getAll() {
         List<BillEntity> list = new ArrayList<>();
         try {
@@ -47,7 +50,6 @@ public class BillDaoImpl implements InterfaceDAO<BillEntity, Integer>{
         return list;
     }
 
-    @Override
     public BillEntity getById(Integer id) {
         try {
             PreparedStatement pst = con.prepareStatement("select * from bill where id =?");
@@ -62,28 +64,53 @@ public class BillDaoImpl implements InterfaceDAO<BillEntity, Integer>{
         return null;
     }
 //int id, int em_id, String client_name, double total_price, Date date_create
-    @Override
-    public void insert(BillEntity t) {
+    public void insert(BillEntity t, List<Pro_id_count> pro_id_count) {
         try {
+            ProductDaoImpl dpro = new ProductDaoImpl(con);
+            double price = 0;
+            if(pro_id_count.size() > 0) {
+                for(Pro_id_count p: pro_id_count) {
+                    price += dpro.getById(p.getPro_id()).getPrice() * p.getCount();
+                }
+            }
             PreparedStatement pst = con.prepareStatement("insert into bill values(?,?,?,?,?)");
             pst.setInt(1, t.getId());
             pst.setInt(2, t.getEm_id());
             pst.setString(3, t.getClient_name());
-            pst.setDouble(4, t.getTotal_price());
-            pst.setDate(5, t.getDate_create());
+            pst.setDouble(4, price);
+            pst.setDate(5, new java.sql.Date(Calendar.getInstance().getTimeInMillis()));
             pst.executeUpdate();
+            
         } catch (SQLException ex) {
             Logger.getLogger(BillDaoImpl.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+    
+    public Integer getMaxId() {
+        try {
+            Statement st = con.createStatement();
+            ResultSet rs = st.executeQuery("SELECT MAX(ID) FROM bill");
+            if(rs.next()) {
+                return rs.getInt(1);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(BillDaoImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return 0;
+    }
 
-    @Override
     public void update(BillEntity t) {
         try {
+            ProductDaoImpl dpro = new ProductDaoImpl(con);
+            double price = 0;
+            Pro_billDaoImpl dpb = new Pro_billDaoImpl(con);
+            for(Bill_proEntity bpe: dpb.getByBill_Id(t.getId())) {
+                price += dpro.getById(bpe.getPro_id()).getPrice() * bpe.getCount();
+            }
             PreparedStatement pst = con.prepareStatement("update bill set em_id=?,client_name=?,total_price=?,date_create=? where id=?");
             pst.setInt(1, t.getEm_id());
             pst.setString(2, t.getClient_name());
-            pst.setDouble(3, t.getTotal_price());
+            pst.setDouble(3, price);
             pst.setDate(4, t.getDate_create());
             pst.setInt(5, t.getId());
             pst.executeUpdate();
@@ -92,7 +119,6 @@ public class BillDaoImpl implements InterfaceDAO<BillEntity, Integer>{
         }
     }
 
-    @Override
     public void deleteById(Integer id) {
         try {
             PreparedStatement pst = con.prepareStatement("delete from bill where id = ?");
@@ -103,7 +129,6 @@ public class BillDaoImpl implements InterfaceDAO<BillEntity, Integer>{
         }
     }
 
-    @Override
     public List<BillEntity> search(String name) {
         List<BillEntity> list = new ArrayList<>();
         try {
