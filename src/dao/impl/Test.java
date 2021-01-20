@@ -28,7 +28,8 @@ public class Test {
     public static void main(String[] args) {
         Connection con = DbConnection.getConnect();
         BillDaoImpl bill = new BillDaoImpl(con);
-        System.out.println(bill.getMaxId());;
+        Pro_billDaoImpl dpro = new Pro_billDaoImpl(con);
+        System.out.println(dpro.getByPro_id(15));
     }
     
 }

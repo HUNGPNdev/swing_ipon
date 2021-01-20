@@ -63,12 +63,12 @@ public class AccountList extends javax.swing.JInternalFrame {
     private void loadAccountList() {
         DefaultTableModel model = new DefaultTableModel();
         Vector colums = new Vector();
-        colums.add("Id");
-        colums.add("Fullname");
-        colums.add("Username");
-        colums.add("Password");
-        colums.add("Status");
-        colums.add("Roles");
+        colums.add("mã");
+        colums.add("Tên đầy đủ");
+        colums.add("tên người dùng");
+        colums.add("mật khẩu");
+        colums.add("trạng thái");
+        colums.add("quyền");
         model.setColumnIdentifiers(colums);
         for (EmployeeEntity e : demp.getAll()) {
             Vector rows = new Vector();
@@ -330,12 +330,12 @@ public class AccountList extends javax.swing.JInternalFrame {
         String name = JOptionPane.showInputDialog(this, "Mời bạn nhập fullname tên cần tìm?");
         DefaultTableModel model = new DefaultTableModel();
         Vector colums = new Vector();
-        colums.add("Id");
-        colums.add("Fullname");
-        colums.add("Username");
-        colums.add("Password");
-        colums.add("Status");
-        colums.add("Roles");
+        colums.add("mã");
+        colums.add("Tên đầy đủ");
+        colums.add("tên người dùng");
+        colums.add("mật khẩu");
+        colums.add("trạng thái");
+        colums.add("quyền");
         model.setColumnIdentifiers(colums);
         for (EmployeeEntity e : demp.search(name)) {
             Vector rows = new Vector();
@@ -478,7 +478,6 @@ public class AccountList extends javax.swing.JInternalFrame {
                     msg.setText("Vui lòng điền đầy đủ thông tin!");
                 } else {
                     if (password.getText().equals(password1.getText())) {
-                        System.out.println();
                         if (this.validateUserName(username.getText())) {
                             if (this.validateUserName(password.getText())) {
                                 em.setId(Integer.parseInt(em_id.getText()));
@@ -531,13 +530,17 @@ public class AccountList extends javax.swing.JInternalFrame {
                 if (formMain.em.getId() == Integer.parseInt(em_id.getText())) {
                     msg.setText("Không được xóa tài khoản đang đăng nhập!");
                 } else {
-                    EmployeeEntity em = demp.getById(Integer.parseInt(em_id.getText()));
-                    der.deleteAll(em.getId());
-                    demp.deleteById(em.getId());
-                    msg.setText("");
-                    em_id.setText("");
-                    this.loadPage();
-                    this.loadAccountList();
+                    int opcion = JOptionPane.showConfirmDialog(this, "Bạn có chắc muốn xóa?", "CẢNH BÁO!", JOptionPane.YES_NO_OPTION);
+                    if (opcion == 0) {
+                        EmployeeEntity em = demp.getById(Integer.parseInt(em_id.getText()));
+                        der.deleteAll(em.getId());
+                        demp.deleteById(em.getId());
+                        msg.setText("");
+                        em_id.setText("");
+                        this.loadPage();
+                        this.loadAccountList();
+                    }
+
                 }
             } catch (URISyntaxException ex) {
                 Logger.getLogger(AccountList.class.getName()).log(Level.SEVERE, null, ex);

@@ -307,8 +307,8 @@ public class ProBill_Frm extends javax.swing.JFrame {
                     pre.setNow_count(pre.getNow_count() - 1);
                 }
             }
-            System.out.println(pro_id_count);
-            System.out.println(allBill_Pro);
+//            System.out.println(pro_id_count);
+//            System.out.println(allBill_Pro);
             this.loadPro();
             this.loadProList();
         }
@@ -358,8 +358,8 @@ public class ProBill_Frm extends javax.swing.JFrame {
                     lp.get(i).setNow_count(lp.get(i).getNow_count() + 1);
                 }
             }
-            System.out.println(pro_id_count);
-            System.out.println(allBill_Pro);
+//            System.out.println(pro_id_count);
+//            System.out.println(allBill_Pro);
             this.loadPro();
             this.loadProList();
         }

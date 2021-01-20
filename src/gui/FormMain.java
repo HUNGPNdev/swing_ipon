@@ -31,6 +31,7 @@ public class FormMain extends javax.swing.JFrame {
     private CategoryList categoryList;
     private Statistic statistic;
     private RoleList roleList;
+    private FrmAccountDetails accountDetails;
     public static EmployeeEntity em = null;
 
     /**
@@ -42,84 +43,58 @@ public class FormMain extends javax.swing.JFrame {
         centerFrame();
         this.em = em;
         username.setText(em.getFullname());
+        accountDetails = new FrmAccountDetails(em);
 
-        if (checkAdmin) {
-            home = new Home();
-            home.setName(em.getFullname());
-            accountList = new AccountList();
-            productList = new ProductList();
-            roleList = new RoleList();
-            coupontList = new CouponList(em);
-
-            billList = new BillList(em);
-            categoryList = new CategoryList();
-            statistic = new Statistic();
-
-            destop.add(home).setVisible(true);
-            destop.add(productList);
-            destop.add(accountList);
-            destop.add(coupontList);
-            destop.add(billList);
-            destop.add(categoryList);
-            destop.add(roleList);
-            destop.add(statistic);
-        } else {
-            home = new Home();
-            home.setName(em.getFullname());
-            accountList = new AccountList();
-            roleList = new RoleList();
-            productList = new ProductList();
-            coupontList = new CouponList(em);
-            billList = new BillList(em);
+        if (!checkAdmin) {
             account.setEnabled(false);
-            categoryList = new CategoryList();
-            statistic = new Statistic();
-
-            destop.add(home).setVisible(true);
-            destop.add(productList);
-            destop.add(accountList);
-            destop.add(coupontList);
-            destop.add(billList);
-            destop.add(roleList);
-            destop.add(categoryList);
-            destop.add(statistic);
         }
-    }
-  private void centerFrame() {
-    Dimension windowSize = getSize();
-    GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
-    Point centerPoint = ge.getCenterPoint();
 
-    int dx = centerPoint.x - windowSize.width / 2;
-    int dy = centerPoint.y - windowSize.height / 2;
-    setLocation(dx, dy);
-  }
-    public FormMain() throws URISyntaxException {
-        initComponents();
-    }
-
-    public FormMain(EmployeeEntity em) throws URISyntaxException {
-        initComponents();
-        centerFrame();
-        this.em = em;
-        username.setText(em.getFullname());
         home = new Home();
+        home.setName(em.getFullname());
         accountList = new AccountList();
+        roleList = new RoleList();
         productList = new ProductList();
         coupontList = new CouponList(em);
-        billList = new BillList();
+        billList = new BillList(em);
         categoryList = new CategoryList();
-        roleList = new RoleList();
         statistic = new Statistic();
-
         destop.add(home).setVisible(true);
         destop.add(productList);
         destop.add(accountList);
         destop.add(coupontList);
         destop.add(billList);
-        destop.add(categoryList);
         destop.add(roleList);
+        destop.add(categoryList);
         destop.add(statistic);
+        destop.add(accountDetails);
+    }
+    
+    private void setSize () {
+        final Dimension dsize = destop.getSize();
+        final int desktopW = (int) dsize.getWidth();
+        final int desktopH = (int) dsize.getHeight();
+        productList.setSize(desktopW, desktopH);
+        accountList.setSize(desktopW, desktopH);
+        coupontList.setSize(desktopW, desktopH);
+        billList.setSize(desktopW, desktopH);
+        roleList.setSize(desktopW, desktopH);
+        categoryList.setSize(desktopW, desktopH);
+        statistic.setSize(desktopW, desktopH);
+        accountDetails.setSize(desktopW, desktopH);
+    }
+
+    private void centerFrame() {
+        Dimension windowSize = getSize();
+        GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+        Point centerPoint = ge.getCenterPoint();
+
+        int dx = centerPoint.x - windowSize.width / 2;
+        int dy = centerPoint.y - windowSize.height / 2;
+        setLocation(dx, dy);
+    }
+
+    public FormMain() throws URISyntaxException {
+        initComponents();
     }
 
     /**
@@ -364,7 +339,7 @@ public class FormMain extends javax.swing.JFrame {
                     .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, 46, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 5, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, 31, Short.MAX_VALUE)
+                .addGap(31, 31, 31)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(product, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel10))
@@ -393,14 +368,12 @@ public class FormMain extends javax.swing.JFrame {
                 .addComponent(jSeparator4, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(account, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGap(18, 18, 18)
-                        .addComponent(btnRoleList, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(jLabel16, javax.swing.GroupLayout.DEFAULT_SIZE, 46, Short.MAX_VALUE)
-                        .addGap(18, 18, 18)
-                        .addComponent(jLabel18)))
+                    .addComponent(account, javax.swing.GroupLayout.DEFAULT_SIZE, 38, Short.MAX_VALUE)
+                    .addComponent(jLabel16, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnRoleList, javax.swing.GroupLayout.DEFAULT_SIZE, 38, Short.MAX_VALUE)
+                    .addComponent(jLabel18, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(29, 29, 29)
                 .addComponent(jSeparator5, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(230, 230, 230)
@@ -408,17 +381,7 @@ public class FormMain extends javax.swing.JFrame {
         );
 
         destop.setAutoscrolls(true);
-
-        javax.swing.GroupLayout destopLayout = new javax.swing.GroupLayout(destop);
-        destop.setLayout(destopLayout);
-        destopLayout.setHorizontalGroup(
-            destopLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
-        destopLayout.setVerticalGroup(
-            destopLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
+        destop.setLayout(new java.awt.BorderLayout());
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -444,19 +407,16 @@ public class FormMain extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void accountMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_accountMouseClicked
-        if (checkAdmin) {
-            home.setVisible(false);
-            productList.setVisible(false);
-            coupontList.setVisible(false);
-            billList.setVisible(false);
-            categoryList.setVisible(false);
-            roleList.setVisible(false);
-            accountList.setVisible(true);
-            statistic.setVisible(false);
-        } else {
-            JOptionPane.showMessageDialog(this,
-                    "Bạn Không Có Quyền Truy Cập");
-        }
+        accountDetails.setVisible(true);
+        home.setVisible(false);
+        billList.setVisible(false);
+        coupontList.setVisible(false);
+        accountList.setVisible(false);
+        categoryList.setVisible(false);
+        roleList.setVisible(false);
+        productList.setVisible(false);
+        statistic.setVisible(false);
+        this.setSize();
     }//GEN-LAST:event_accountMouseClicked
 
     private void productMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_productMouseClicked
@@ -466,8 +426,10 @@ public class FormMain extends javax.swing.JFrame {
         accountList.setVisible(false);
         categoryList.setVisible(false);
         roleList.setVisible(false);
-        productList.setVisible(true);
         statistic.setVisible(false);
+        accountDetails.setVisible(false);
+        productList.setVisible(true);
+        this.setSize();
     }//GEN-LAST:event_productMouseClicked
 
     private void couponShowMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_couponShowMouseClicked
@@ -479,6 +441,8 @@ public class FormMain extends javax.swing.JFrame {
         categoryList.setVisible(false);
         productList.setVisible(false);
         statistic.setVisible(false);
+        accountDetails.setVisible(false);
+        this.setSize();
     }//GEN-LAST:event_couponShowMouseClicked
 
     private void btnShowBillListMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnShowBillListMouseClicked
@@ -490,6 +454,8 @@ public class FormMain extends javax.swing.JFrame {
         categoryList.setVisible(false);
         productList.setVisible(false);
         statistic.setVisible(false);
+        accountDetails.setVisible(false);
+        this.setSize();
     }//GEN-LAST:event_btnShowBillListMouseClicked
 
     private void btnLogoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogoutActionPerformed
@@ -511,6 +477,8 @@ public class FormMain extends javax.swing.JFrame {
         categoryList.setVisible(true);
         productList.setVisible(false);
         statistic.setVisible(false);
+        accountDetails.setVisible(false);
+        this.setSize();
     }//GEN-LAST:event_btnCategoryListMouseClicked
 
     private void btnRoleListMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnRoleListMouseClicked
@@ -522,6 +490,8 @@ public class FormMain extends javax.swing.JFrame {
         categoryList.setVisible(false);
         productList.setVisible(false);
         statistic.setVisible(false);
+        accountDetails.setVisible(false);
+        this.setSize();
     }//GEN-LAST:event_btnRoleListMouseClicked
 
     private void btnStoreMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnStoreMouseClicked
@@ -533,6 +503,8 @@ public class FormMain extends javax.swing.JFrame {
         categoryList.setVisible(false);
         productList.setVisible(false);
         statistic.setVisible(true);
+        accountDetails.setVisible(false);
+        this.setSize();
     }//GEN-LAST:event_btnStoreMouseClicked
 
     private void btnEmplMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnEmplMouseClicked
@@ -545,6 +517,8 @@ public class FormMain extends javax.swing.JFrame {
             roleList.setVisible(false);
             accountList.setVisible(true);
             statistic.setVisible(false);
+            accountDetails.setVisible(false);
+            this.setSize();
         } else {
             JOptionPane.showMessageDialog(this,
                     "Bạn Không Có Quyền Truy Cập");

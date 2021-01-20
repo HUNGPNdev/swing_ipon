@@ -161,6 +161,20 @@ public class ProductDaoImpl implements InterfaceDAO<ProductEntity, Integer> {
         }
         return list;
     }
+    
+    public boolean getByCate_id (int cate_id) {
+        try {
+            PreparedStatement pst = con.prepareStatement("select * from product where cate_id = ?");
+            pst.setInt(1, cate_id);
+            ResultSet rs = pst.executeQuery();
+            if(rs.next()) {
+                return true;
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(ProductDaoImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return false;
+    }
 
     public int totalPro() {
         int tong = 0;

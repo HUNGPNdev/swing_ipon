@@ -40,7 +40,6 @@ public class CategoryList extends javax.swing.JInternalFrame {
      */
     public CategoryList() {
         initComponents();
-        txtError.setVisible(false);
         con = DbConnection.getConnect();
         categoryDao = new CategoryDaoImpl(con);
         productDaoImpl = new ProductDaoImpl(con);
@@ -162,7 +161,6 @@ public class CategoryList extends javax.swing.JInternalFrame {
 
         txtError.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
         txtError.setForeground(new java.awt.Color(255, 51, 51));
-        txtError.setText("Vui Lòng Nhập Tên !");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -183,19 +181,21 @@ public class CategoryList extends javax.swing.JInternalFrame {
                         .addGap(44, 44, 44)
                         .addComponent(btnRemove, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(133, 133, 133))
+            .addComponent(jScrollPane1)
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(413, 413, 413)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jLabel1)
-                            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 203, Short.MAX_VALUE)
-                            .addComponent(txtError, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                    .addGroup(layout.createSequentialGroup()
                         .addGap(297, 297, 297)
-                        .addComponent(btnAddCategory, javax.swing.GroupLayout.PREFERRED_SIZE, 423, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(btnAddCategory, javax.swing.GroupLayout.PREFERRED_SIZE, 423, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(350, 350, 350)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel1)
+                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 320, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(316, 316, 316)
+                        .addComponent(txtError, javax.swing.GroupLayout.PREFERRED_SIZE, 523, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addComponent(jScrollPane1)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -204,22 +204,22 @@ public class CategoryList extends javax.swing.JInternalFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jScrollPane5)
+                    .addComponent(btnRemove, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(btnRemove)
                         .addComponent(btnEdit)
                         .addComponent(btnNew)
                         .addComponent(btnSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 378, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(txtError)
-                .addGap(19, 19, 19)
+                .addComponent(txtError, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(45, 45, 45)
                 .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(18, 18, 18)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(82, 82, 82)
+                .addGap(44, 44, 44)
                 .addComponent(btnAddCategory, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(138, Short.MAX_VALUE))
+                .addContainerGap(133, Short.MAX_VALUE))
         );
 
         pack();
@@ -231,7 +231,7 @@ public class CategoryList extends javax.swing.JInternalFrame {
 
     private void btnAddCategoryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddCategoryActionPerformed
         if (txtCategoryName.getText().equals("")) {
-                txtError.setVisible(true);
+            txtError.setText("Vui Lòng Nhập Tên !");
         } else {
             CategoryEntity category = new CategoryEntity();
             category.setName(txtCategoryName.getText());
@@ -239,19 +239,30 @@ public class CategoryList extends javax.swing.JInternalFrame {
             txtCategoryName.setText("");
             categoryList = categoryDao.getAll();
             loadCategory(categoryList);
-               txtError.setVisible(false);
         }
     }//GEN-LAST:event_btnAddCategoryActionPerformed
 
     private void btnNewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNewActionPerformed
         txtCategoryName.setText("");
+        txtError.setText("");
     }//GEN-LAST:event_btnNewActionPerformed
 
     private void btnRemoveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveActionPerformed
-        productDaoImpl.deleteByCate_id(id);
-        categoryDao.deleteById(id);
-        categoryList = categoryDao.getAll();
-        loadCategory(categoryList);
+        int opcion = JOptionPane.showConfirmDialog(this, "Bạn có chắc muốn xóa?", "CẢNH BÁO!", JOptionPane.YES_NO_OPTION);
+        if (opcion == 0) {
+            if (txtCategoryName.getText().equals("")) {
+                txtError.setText("Vui lòng chọn cate cần xóa!");
+            } else {
+                if (productDaoImpl.getByCate_id(id)) {
+                    txtError.setText("Cate có product tham chiếu. không thể xóa!");
+                } else {
+                    categoryDao.deleteById(id);
+                    categoryList = categoryDao.getAll();
+                    loadCategory(categoryList);
+                }
+            }
+        }
+
     }//GEN-LAST:event_btnRemoveActionPerformed
 
     private void tblCategoryMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblCategoryMouseClicked

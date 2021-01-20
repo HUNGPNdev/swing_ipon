@@ -108,6 +108,19 @@ public class EmployeeDaoImpl implements InterfaceDAO<EmployeeEntity, Integer> {
             Logger.getLogger(CategoryDaoImpl.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+    
+    public void userUpdate(EmployeeEntity t) {
+        try {
+            PreparedStatement pst = con.prepareStatement("update employee set fullname=?, username=?, password=? where id = ?");
+            pst.setString(1, t.getFullname());
+            pst.setString(2, t.getUsername());
+            pst.setString(3, t.getPassword());
+            pst.setInt(4, t.getId());
+            pst.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(CategoryDaoImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 
     @Override
     public void deleteById(Integer id) {

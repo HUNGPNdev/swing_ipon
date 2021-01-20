@@ -58,6 +58,20 @@ public class Pro_billDaoImpl {
         return null;
     }
 
+    public boolean getByPro_id(int pro_id) {
+        try {
+            PreparedStatement pst = con.prepareStatement("select * from pro_bill where pro_id=?");
+            pst.setInt(1, pro_id);
+            ResultSet rs = pst.executeQuery();
+            if (rs.next()) {
+                return true;
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(Em_RoleDaoImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return false;
+    }
+
     public List<Bill_proEntity> getByBill_Id(int bill_id) {
         List<Bill_proEntity> list = new ArrayList<>();
         try {
@@ -83,7 +97,7 @@ public class Pro_billDaoImpl {
             Logger.getLogger(Em_RoleDaoImpl.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
     public void delete(int bill_id) {
         try {
             PreparedStatement pst = con.prepareStatement("delete from pro_bill where bill_id=?");

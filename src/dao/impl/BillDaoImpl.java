@@ -169,14 +169,12 @@ public class BillDaoImpl{
             ResultSet rs = pst.executeQuery();
             while (rs.next()) {
                 tongOld += rs.getInt(4);
-                System.out.println(tongOld);
             }
 
             pstt = con.prepareStatement("SELECT * FROM product");
             ResultSet rss = pstt.executeQuery();
             while (rss.next()) {
                 tongNow = rss.getInt(5);
-                   System.out.println(tongNow);
             }
         } catch (SQLException ex) {
             Logger.getLogger(EmployeeDaoImpl.class.getName()).log(Level.SEVERE, null, ex);

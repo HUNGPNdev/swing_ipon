@@ -115,7 +115,7 @@ public class CouponDaoImpl implements CouponDAO<CouponEntity, String> {
             PreparedStatement pst = con.prepareStatement("delete from coupon where id = ?");
             pst.setString(1, id);
             PreparedStatement prost = con.prepareStatement("delete from product where cou_id = ?");
-            prost.setString(1, id);
+            prost.setString(1, id); 
             prost.executeUpdate();
             pst.executeUpdate();
         } catch (SQLException ex) {

@@ -7,6 +7,7 @@ package gui;
 
 import dao.impl.CategoryDaoImpl;
 import dao.impl.DbConnection;
+import dao.impl.Pro_billDaoImpl;
 import static dao.impl.Pro_coupDAOImpl.listPro;
 import dao.impl.ProductDaoImpl;
 import entity.CategoryEntity;
@@ -36,6 +37,7 @@ public class ProductList extends javax.swing.JInternalFrame {
     private ProductDaoImpl dpro;
     private CategoryDaoImpl dcate;
     private Connection con;
+    private Pro_billDaoImpl dpb;
 
     public ProductList() {
         initComponents();
@@ -43,8 +45,10 @@ public class ProductList extends javax.swing.JInternalFrame {
         con = DbConnection.getConnect();
         dpro = new ProductDaoImpl(con);
         dcate = new CategoryDaoImpl(con);
+        dpb = new Pro_billDaoImpl(con);
         this.loadCate();
         this.loadPro();
+        this.loadPage();
     }
 
     private void loadPage() {
@@ -60,13 +64,13 @@ public class ProductList extends javax.swing.JInternalFrame {
     private void loadPro() {
         DefaultTableModel model = new DefaultTableModel();
         Vector cols = new Vector();
-        cols.add("Id");
-        cols.add("Pro Name");
-        cols.add("Category");
-        cols.add("Old Count");
-        cols.add("Now Count");
-        cols.add("Price");
-        cols.add("Cou_id");
+        cols.add("Mã");
+        cols.add("Tên sản phẩm");
+        cols.add("mã Danh mục");
+        cols.add("số lượng nhập");
+        cols.add("số lượng trong kho");
+        cols.add("giá");
+        cols.add("mã đơn nhập");
         model.setColumnIdentifiers(cols);
         for (ProductEntity p : dpro.getAll()) {
             Vector rows = new Vector();
@@ -310,13 +314,13 @@ public class ProductList extends javax.swing.JInternalFrame {
         String str = JOptionPane.showInputDialog(this, "Vui lòng nhập tên sản phẩm cần tìm: ");
         DefaultTableModel model = new DefaultTableModel();
         Vector cols = new Vector();
-        cols.add("Id");
-        cols.add("Pro Name");
-        cols.add("Category");
-        cols.add("Old Count");
-        cols.add("Now Count");
-        cols.add("Price");
-        cols.add("Cou_id");
+        cols.add("Mã");
+        cols.add("Tên sản phẩm");
+        cols.add("mã Danh mục");
+        cols.add("số lượng nhập");
+        cols.add("số lượng trong kho");
+        cols.add("giá");
+        cols.add("mã đơn nhập");
         model.setColumnIdentifiers(cols);
         for (ProductEntity p : dpro.search(str)) {
             Vector rows = new Vector();
@@ -387,9 +391,17 @@ public class ProductList extends javax.swing.JInternalFrame {
         if (id.getText().equals("")) {
             msg.setText("Vui lòng chọn sản phẩm cần xóa!");
         } else {
-            dpro.deleteById(Integer.parseInt(id.getText()));
-            this.loadPro();
-            this.loadPage();
+            int opcion = JOptionPane.showConfirmDialog(this, "Bạn có chắc muốn xóa?", "CẢNH BÁO!", JOptionPane.YES_NO_OPTION);
+            if (opcion == 0) {
+                if (dpb.getByPro_id(Integer.parseInt(id.getText()))) {
+                    msg.setText("Sản phẩm này có tham chiếu. Không thể xóa!");
+                } else {
+                    dpro.deleteById(Integer.parseInt(id.getText()));
+                    this.loadPro();
+                    this.loadPage();
+                }
+            }
+
         }
     }//GEN-LAST:event_deleteActionPerformed
 

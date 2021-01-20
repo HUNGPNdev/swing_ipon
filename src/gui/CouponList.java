@@ -8,6 +8,7 @@ package gui;
 import dao.impl.CouponDaoImpl;
 import dao.impl.DbConnection;
 import dao.impl.EmployeeDaoImpl;
+import dao.impl.Pro_billDaoImpl;
 import dao.impl.Pro_coupDAOImpl;
 import dao.impl.ProductDaoImpl;
 import entity.CouponEntity;
@@ -33,6 +34,7 @@ public class CouponList extends javax.swing.JInternalFrame {
     private EmployeeEntity em;
     private boolean checkChooserPro = false;
     private Connection con;
+    private Pro_billDaoImpl dpb;
     public static List<ProductEntity> listProByCou_Id = null;
     public static String coup_id = null;
     public Pro_coupDAOImpl pro_coup = new Pro_coupDAOImpl();
@@ -47,6 +49,7 @@ public class CouponList extends javax.swing.JInternalFrame {
         dcoup = new CouponDaoImpl(con);
         dpro = new ProductDaoImpl(con);
         demp = new EmployeeDaoImpl(con);
+        dpb = new Pro_billDaoImpl(con);
         this.loadCoupon();
     }
 
@@ -63,12 +66,12 @@ public class CouponList extends javax.swing.JInternalFrame {
     private void loadCoupon() {
         DefaultTableModel model = new DefaultTableModel();
         Vector cols = new Vector();
-        cols.add("Id");
-        cols.add("Employee");
-        cols.add("Supplier");
-        cols.add("Total Price");
-        cols.add("Products");
-        cols.add("Date Create");
+        cols.add("Mã ");
+        cols.add("Tên nhân viên");
+        cols.add("Nhà cung cấp");
+        cols.add("Tổng tiền");
+        cols.add("Sản phẩm");
+        cols.add("Ngày tạo");
         model.setColumnIdentifiers(cols);
         for (CouponEntity c : dcoup.getAll()) {
             Vector rows = new Vector();
@@ -307,6 +310,18 @@ public class CouponList extends javax.swing.JInternalFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    public boolean checkReference(String coup_id) {
+        List<ProductEntity> list = dpro.getProByCoupon_id(coup_id);
+        boolean check = false;
+        for (ProductEntity p : list) {
+            if (dpb.getByPro_id(p.getId())) {
+                check = true;
+                break;
+            }
+        }
+        return check;
+    }
+
     private void addProductListActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addProductListActionPerformed
         pro_coup.setListPro(dpro.getProByCoupon_id(coup_id));
         AddListProductCoupon addpro = new AddListProductCoupon();
@@ -381,12 +396,12 @@ public class CouponList extends javax.swing.JInternalFrame {
         String str = JOptionPane.showInputDialog(this, "Nhập tên nhà cung cấp cần tìm: ");
         DefaultTableModel model = new DefaultTableModel();
         Vector cols = new Vector();
-        cols.add("Id");
-        cols.add("Employee");
-        cols.add("Supplier");
-        cols.add("Total Price");
-        cols.add("Products");
-        cols.add("Date Create");
+        cols.add("Mã ");
+        cols.add("Tên nhân viên");
+        cols.add("Nhà cung cấp");
+        cols.add("Tổng tiền");
+        cols.add("Sản phẩm");
+        cols.add("Ngày tạo");
         model.setColumnIdentifiers(cols);
         for (CouponEntity c : dcoup.search(str)) {
             Vector rows = new Vector();
@@ -411,9 +426,14 @@ public class CouponList extends javax.swing.JInternalFrame {
         } else {
             int opcion = JOptionPane.showConfirmDialog(this, "Bạn có chắc muốn xóa?", "CẢNH BÁO!", JOptionPane.YES_NO_OPTION);
             if (opcion == 0) {
-                dcoup.deleteById(id.getText());
-                this.loadPage();
-                this.loadCoupon();
+                if (this.checkReference(id.getText())) {
+                    msg.setText("Sản phẩm này có tham chiếu. Không thể xóa!");
+                } else {
+                    dcoup.deleteById(id.getText());
+                    this.loadPage();
+                    this.loadCoupon();
+                }
+
             }
         }
     }//GEN-LAST:event_deleteActionPerformed

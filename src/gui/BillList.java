@@ -72,12 +72,12 @@ public class BillList extends javax.swing.JInternalFrame {
     private void loadBill() {
         DefaultTableModel model = new DefaultTableModel();
         Vector cols = new Vector();
-        cols.add("Id");
-        cols.add("Employee");
-        cols.add("Client Name");
-        cols.add("Total Price");
-        cols.add("Products");
-        cols.add("Date Create");
+        cols.add("Mã");
+        cols.add("Nhân viên");
+        cols.add("Tên khách hàng");
+        cols.add("Tổng tiền");
+        cols.add("Sản phẩm");
+        cols.add("Ngày tạo");
         model.setColumnIdentifiers(cols);
         for (BillEntity b : dbill.getAll()) {
             Vector rows = new Vector();
@@ -290,12 +290,12 @@ public class BillList extends javax.swing.JInternalFrame {
         String str = JOptionPane.showInputDialog(this, "Nhập tên khách hàng cần tìm: ");
         DefaultTableModel model = new DefaultTableModel();
         Vector cols = new Vector();
-        cols.add("Id");
-        cols.add("Employee");
-        cols.add("Client Name");
-        cols.add("Total Price");
-        cols.add("Products");
-        cols.add("Date Create");
+        cols.add("Mã");
+        cols.add("Nhân viên");
+        cols.add("Tên khách hàng");
+        cols.add("Tổng tiền");
+        cols.add("Sản phẩm");
+        cols.add("Ngày tạo");
         model.setColumnIdentifiers(cols);
         for (BillEntity b : dbill.search(str)) {
             Vector rows = new Vector();

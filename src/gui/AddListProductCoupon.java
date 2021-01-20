@@ -62,12 +62,12 @@ public class AddListProductCoupon extends javax.swing.JFrame {
     private void loadPro() {
         DefaultTableModel model = new DefaultTableModel();
         Vector cols = new Vector();
-        cols.add("Id");
-        cols.add("Pro Name");
-        cols.add("Category");
-        cols.add("Count");
-        cols.add("Price");
-        cols.add("Cou_id");
+        cols.add("mã");
+        cols.add("Tên sản phẩm");
+        cols.add("Mã danh mục");
+        cols.add("Số lượng");
+        cols.add("Giá");
+        cols.add("Mã đơn nhập");
         model.setColumnIdentifiers(cols);
         for (ProductEntity p : listPro) {
             Vector rows = new Vector();
