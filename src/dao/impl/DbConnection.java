@@ -24,7 +24,7 @@ public class DbConnection {
         Connection con = null;
         try {
             Class.forName(driver);
-            con = DriverManager.getConnection(url, "root", "1234");
+            con = DriverManager.getConnection(url, "root", "12345");
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(DbConnection.class.getName()).log(Level.SEVERE, null, ex);
         } catch (SQLException ex) {

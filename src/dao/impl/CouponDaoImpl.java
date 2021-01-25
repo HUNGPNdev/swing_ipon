@@ -13,6 +13,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -209,5 +210,88 @@ public class CouponDaoImpl implements CouponDAO<CouponEntity, String> {
             Logger.getLogger(EmployeeDaoImpl.class.getName()).log(Level.SEVERE, null, ex);
         }
         return arrcate.size();
+    }
+    
+       public ArrayList<Float> totalMoneyCouponWeek() {
+        ArrayList<Float> arr = new ArrayList<>();
+        PreparedStatement pst;
+        PreparedStatement pst1;
+        PreparedStatement pst2;
+        PreparedStatement pst3;
+        float tong = 0;
+        try {
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM");
+            Calendar calendar = Calendar.getInstance();
+            //
+            pst = con.prepareStatement("SELECT * FROM coupon"
+                    + " where date_create = ? or  date_create = ? or  date_create = ?  or  date_create = ? or  date_create = ? or  date_create = ? or  date_create = ? ");
+            pst.setString(1, simpleDateFormat.format(calendar.getTime()) + "-01");
+            pst.setString(2, simpleDateFormat.format(calendar.getTime()) + "-02");
+            pst.setString(3, simpleDateFormat.format(calendar.getTime()) + "-03");
+            pst.setString(4, simpleDateFormat.format(calendar.getTime()) + "-04");
+            pst.setString(5, simpleDateFormat.format(calendar.getTime()) + "-05");
+            pst.setString(6, simpleDateFormat.format(calendar.getTime()) + "-06");
+            pst.setString(7, simpleDateFormat.format(calendar.getTime()) + "-07");
+            ResultSet rs = pst.executeQuery();
+            while (rs.next()) {
+                tong += rs.getInt(4);
+            }
+            arr.add(tong);
+            tong = 0;
+            //
+            pst1 = con.prepareStatement("SELECT * FROM coupon"
+                    + " where date_create = ? or  date_create = ? or  date_create = ?  or  date_create = ? or  date_create = ? or  date_create = ? or  date_create = ? or  date_create = ? ");
+            pst1.setString(1, simpleDateFormat.format(calendar.getTime()) + "-08");
+            pst1.setString(2, simpleDateFormat.format(calendar.getTime()) + "-09");
+            pst1.setString(3, simpleDateFormat.format(calendar.getTime()) + "-10");
+            pst1.setString(4, simpleDateFormat.format(calendar.getTime()) + "-11");
+            pst1.setString(5, simpleDateFormat.format(calendar.getTime()) + "-12");
+            pst1.setString(6, simpleDateFormat.format(calendar.getTime()) + "-13");
+            pst1.setString(7, simpleDateFormat.format(calendar.getTime()) + "-14");
+            pst1.setString(8, simpleDateFormat.format(calendar.getTime()) + "-15");
+            ResultSet rs1 = pst1.executeQuery();
+            while (rs1.next()) {
+                tong += rs1.getInt(4);
+            }
+            arr.add(tong);
+            tong = 0;
+            //
+            pst2 = con.prepareStatement("SELECT * FROM coupon"
+                    + " where date_create = ? or  date_create = ? or  date_create = ?  or  date_create = ? or  date_create = ? or  date_create = ? or  date_create = ?or  date_create = ? ");
+            pst2.setString(1, simpleDateFormat.format(calendar.getTime()) + "-16");
+            pst2.setString(2, simpleDateFormat.format(calendar.getTime()) + "-17");
+            pst2.setString(3, simpleDateFormat.format(calendar.getTime()) + "-18");
+            pst2.setString(4, simpleDateFormat.format(calendar.getTime()) + "-19");
+            pst2.setString(5, simpleDateFormat.format(calendar.getTime()) + "-20");
+            pst2.setString(6, simpleDateFormat.format(calendar.getTime()) + "-21");
+            pst2.setString(7, simpleDateFormat.format(calendar.getTime()) + "-22");
+            pst2.setString(8, simpleDateFormat.format(calendar.getTime()) + "-23");
+            ResultSet rs2 = pst2.executeQuery();
+            while (rs2.next()) {
+                tong += rs2.getInt(4);
+            }
+            arr.add(tong);
+            tong = 0;
+            //
+            pst3 = con.prepareStatement("SELECT * FROM coupon"
+                    + " where date_create = ? or  date_create = ? or  date_create = ?  or  date_create = ? or  date_create = ? or  date_create = ? or  date_create = ? or  date_create = ? ");
+            pst3.setString(1, simpleDateFormat.format(calendar.getTime()) + "-24");
+            pst3.setString(2, simpleDateFormat.format(calendar.getTime()) + "-25");
+            pst3.setString(3, simpleDateFormat.format(calendar.getTime()) + "-26");
+            pst3.setString(4, simpleDateFormat.format(calendar.getTime()) + "-27");
+            pst3.setString(5, simpleDateFormat.format(calendar.getTime()) + "-28");
+            pst3.setString(6, simpleDateFormat.format(calendar.getTime()) + "-29");
+            pst3.setString(7, simpleDateFormat.format(calendar.getTime()) + "-30");
+            pst3.setString(8, simpleDateFormat.format(calendar.getTime()) + "-31");
+            ResultSet rs3 = pst3.executeQuery();
+            while (rs3.next()) {
+                tong += rs3.getInt(4);
+            }
+            arr.add(tong);
+            tong = 0;
+        } catch (SQLException ex) {
+            Logger.getLogger(EmployeeDaoImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return arr;
     }
 }

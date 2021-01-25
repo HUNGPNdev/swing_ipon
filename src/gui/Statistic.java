@@ -11,44 +11,148 @@ import dao.impl.CouponDaoImpl;
 import dao.impl.DbConnection;
 import dao.impl.EmployeeDaoImpl;
 import dao.impl.ProductDaoImpl;
+//import static demo.BubbleChartDemo1.createDataset;
+import java.awt.Color;
+import java.awt.FlowLayout;
 import java.sql.Connection;
+import javax.swing.JFrame;
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.ChartPanel;
+import org.jfree.chart.JFreeChart;
+import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.data.category.CategoryDataset;
+import org.jfree.data.category.DefaultCategoryDataset;
 
 /**
  *
  * @author admin
  */
 public class Statistic extends javax.swing.JInternalFrame {
-        private Connection con;
-        private  ProductDaoImpl productDaoImpl;
-        private  EmployeeDaoImpl employeeDaoImpl;
-        private  BillDaoImpl billDaoImpl ;
-        private CouponDaoImpl couponDaoImpl;
-        private CategoryDaoImpl categoryDaoImpl;
+
+    private Connection con;
+    private ProductDaoImpl productDaoImpl;
+    private EmployeeDaoImpl employeeDaoImpl;
+    private BillDaoImpl billDaoImpl;
+    private CouponDaoImpl couponDaoImpl;
+    private CategoryDaoImpl categoryDaoImpl;
+
     /**
      * Creates new form Statistic
      */
     public Statistic() {
         initComponents();
-         con = DbConnection.getConnect();
-         productDaoImpl = new ProductDaoImpl(con);
-         employeeDaoImpl =  new EmployeeDaoImpl(con);
-         billDaoImpl  =  new BillDaoImpl(con);
-         couponDaoImpl =  new CouponDaoImpl(con);
-         categoryDaoImpl =  new CategoryDaoImpl(con);
-         //
-        txtTotalPro.setText( productDaoImpl.totalPro()+""); 
-        txtTotalEm.setText(employeeDaoImpl.totalEm()+"");
-        txtTotalBill.setText(billDaoImpl.totalBill()+"");
-        txtTotalCoupon.setText(couponDaoImpl.totalCoupon()+"");
-        txtBill.setText(billDaoImpl.totalBill()+"");
-        txtTotalCateBill.setText(categoryDaoImpl.totalCategoryBill()+"");
-        txtTotalProBill.setText(billDaoImpl.totalProBill()+"");
-        txtTotalMoneyBill.setText(billDaoImpl.totalMoneyBill()+"");
-        txtCoupon.setText(couponDaoImpl.totalCoupon()+"");
-        txtTotalProCoupon.setText(couponDaoImpl.totalProCoupon()+"");
-        txtTotalMoneyCoupon.setText(couponDaoImpl.totalMoneyCoupon()+"");
-        txtTotalCateCoupon.setText(couponDaoImpl.totalCateCoupon()+"");
+        con = DbConnection.getConnect();
+        productDaoImpl = new ProductDaoImpl(con);
+        employeeDaoImpl = new EmployeeDaoImpl(con);
+        billDaoImpl = new BillDaoImpl(con);
+        couponDaoImpl = new CouponDaoImpl(con);
+        categoryDaoImpl = new CategoryDaoImpl(con);
+        //
+        txtTotalPro.setText(productDaoImpl.totalPro() + "");
+        txtTotalEm.setText(employeeDaoImpl.totalEm() + "");
+        txtTotalBill.setText(billDaoImpl.totalBill() + "");
+        txtTotalCoupon.setText(couponDaoImpl.totalCoupon() + "");
+        txtBill.setText(billDaoImpl.totalBill() + "");
+        txtTotalCateBill.setText(categoryDaoImpl.totalCategoryBill() + "");
+        txtTotalProBill.setText(billDaoImpl.totalProBill() + "");
+        txtTotalMoneyBill.setText(billDaoImpl.totalMoneyBill() + "");
+        txtCoupon.setText(couponDaoImpl.totalCoupon() + "");
+        txtTotalProCoupon.setText(couponDaoImpl.totalProCoupon() + "");
+        txtTotalMoneyCoupon.setText(couponDaoImpl.totalMoneyCoupon() + "");
+        txtTotalCateCoupon.setText(couponDaoImpl.totalCateCoupon() + "");
+//        biểu đồ tổng
+        HistogramPanel panel = new HistogramPanel();
+        panel.addHistogramColumn("Tuần 1", billDaoImpl.totalMoneyBillWeek().get(0), Color.RED);
+        panel.addHistogramColumn("Tuần 2", billDaoImpl.totalMoneyBillWeek().get(1), Color.BLUE);
+        panel.addHistogramColumn("Tuần 3", billDaoImpl.totalMoneyBillWeek().get(2), Color.ORANGE);
+        panel.addHistogramColumn("Tuần 4", billDaoImpl.totalMoneyBillWeek().get(3), Color.MAGENTA);
+        panel.layoutHistogram();
+
+        charWeekPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
+        charWeekPanel.add(panel);
+        // biểu đồ tháng  tổng
+        HistogramPanel panelmonth = new HistogramPanel();
+        panelmonth.setHistogramHeight(300);
+        panelmonth.setBarWidth(80);
+        panelmonth.addHistogramColumn("Tháng 1", billDaoImpl.totalMoneyBillMonth().get(0), Color.RED);
+        panelmonth.addHistogramColumn("Tháng 2", billDaoImpl.totalMoneyBillMonth().get(1), Color.BLUE);
+        panelmonth.addHistogramColumn("Tháng 3", billDaoImpl.totalMoneyBillMonth().get(2), Color.ORANGE);
+        panelmonth.addHistogramColumn("Tháng 4", billDaoImpl.totalMoneyBillMonth().get(3), Color.DARK_GRAY);
+        panelmonth.addHistogramColumn("Tháng 5", billDaoImpl.totalMoneyBillMonth().get(4), Color.GREEN);
+        panelmonth.addHistogramColumn("Tháng 6", billDaoImpl.totalMoneyBillMonth().get(5), Color.PINK);
+        panelmonth.addHistogramColumn("Tháng 7", billDaoImpl.totalMoneyBillMonth().get(6), Color.LIGHT_GRAY);
+        panelmonth.addHistogramColumn("Tháng 8", billDaoImpl.totalMoneyBillMonth().get(7), Color.YELLOW);
+        panelmonth.addHistogramColumn("Tháng 9", billDaoImpl.totalMoneyBillMonth().get(8), Color.darkGray);
+        panelmonth.addHistogramColumn("Tháng 10", billDaoImpl.totalMoneyBillMonth().get(9), Color.black);
+        panelmonth.addHistogramColumn("Tháng 11", billDaoImpl.totalMoneyBillMonth().get(10), Color.GRAY);
+        panelmonth.addHistogramColumn("Tháng 12", billDaoImpl.totalMoneyBillMonth().get(11), Color.blue);
+        panelmonth.layoutHistogram();
+
+        chartMonthPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
+        chartMonthPanel.add(panelmonth);
+        
+        // biểu đồ tuần hóa đơn
+        HistogramPanel panelbill = new HistogramPanel();
+        panelbill.addHistogramColumn("Tuần 1", billDaoImpl.totalMoneyBillWeek().get(0)/0.05f, Color.RED);
+        panelbill.addHistogramColumn("Tuần 2", billDaoImpl.totalMoneyBillWeek().get(1)/0.05f, Color.BLUE);
+        panelbill.addHistogramColumn("Tuần 3", billDaoImpl.totalMoneyBillWeek().get(2)/0.05f, Color.ORANGE);
+        panelbill.addHistogramColumn("Tuần 4", billDaoImpl.totalMoneyBillWeek().get(3)/0.05f, Color.MAGENTA);
+        panelbill.layoutHistogram();
+        
+        chartWeekBill.setLayout(new FlowLayout(FlowLayout.LEFT));
+        chartWeekBill.add(panelbill);
+               // biểu đồ tháng  hoa đơn
+        HistogramPanel panelmonthbill = new HistogramPanel();
+        panelmonthbill.setHistogramHeight(300);
+        panelmonthbill.setBarWidth(80);
+        panelmonthbill.addHistogramColumn("Tháng 1", billDaoImpl.totalMoneyBillMonth().get(0)/0.05f, Color.RED);
+        panelmonthbill.addHistogramColumn("Tháng 2", billDaoImpl.totalMoneyBillMonth().get(1)/0.05f, Color.BLUE);
+        panelmonthbill.addHistogramColumn("Tháng 3", billDaoImpl.totalMoneyBillMonth().get(2)/0.05f, Color.ORANGE);
+        panelmonthbill.addHistogramColumn("Tháng 4", billDaoImpl.totalMoneyBillMonth().get(3)/0.05f, Color.DARK_GRAY);
+        panelmonthbill.addHistogramColumn("Tháng 5", billDaoImpl.totalMoneyBillMonth().get(4)/0.05f, Color.GREEN);
+        panelmonthbill.addHistogramColumn("Tháng 6", billDaoImpl.totalMoneyBillMonth().get(5)/0.05f, Color.PINK);
+        panelmonthbill.addHistogramColumn("Tháng 7", billDaoImpl.totalMoneyBillMonth().get(6)/0.05f, Color.LIGHT_GRAY);
+        panelmonthbill.addHistogramColumn("Tháng 8", billDaoImpl.totalMoneyBillMonth().get(7)/0.05f, Color.YELLOW);
+        panelmonthbill.addHistogramColumn("Tháng 9", billDaoImpl.totalMoneyBillMonth().get(8)/0.05f, Color.darkGray);
+        panelmonthbill.addHistogramColumn("Tháng 10", billDaoImpl.totalMoneyBillMonth().get(9)/0.05f, Color.black);
+        panelmonthbill.addHistogramColumn("Tháng 11", billDaoImpl.totalMoneyBillMonth().get(10)/0.05f, Color.GRAY);
+        panelmonthbill.addHistogramColumn("Tháng 12", billDaoImpl.totalMoneyBillMonth().get(11)/0.05f, Color.blue);
+        panelmonthbill.layoutHistogram();
+
+        chartMothBill.setLayout(new FlowLayout(FlowLayout.LEFT));
+        chartMothBill.add(panelmonthbill);
+          // biểu đồ tuần đơn nhập
+        HistogramPanel panelstatistic = new HistogramPanel();
+        panelstatistic.addHistogramColumn("Tuần 1", couponDaoImpl.totalMoneyCouponWeek().get(0), Color.RED);
+        panelstatistic.addHistogramColumn("Tuần 2", couponDaoImpl.totalMoneyCouponWeek().get(1), Color.BLUE);
+        panelstatistic.addHistogramColumn("Tuần 3", couponDaoImpl.totalMoneyCouponWeek().get(2), Color.ORANGE);
+        panelstatistic.addHistogramColumn("Tuần 4", couponDaoImpl.totalMoneyCouponWeek().get(3), Color.MAGENTA);
+        panelstatistic.layoutHistogram();
+        
+        chartWeekStatistic.setLayout(new FlowLayout(FlowLayout.LEFT));
+        chartWeekStatistic.add(panelstatistic);
+                // biểu đồ tháng  hoa đơn
+        HistogramPanel panelmonthcoupon = new HistogramPanel();
+        panelmonthcoupon.setHistogramHeight(300);
+        panelmonthcoupon.setBarWidth(80);
+        panelmonthcoupon.addHistogramColumn("Tháng 1", billDaoImpl.totalMoneyBillMonth().get(0)/0.05f, Color.RED);
+        panelmonthcoupon.addHistogramColumn("Tháng 2", billDaoImpl.totalMoneyBillMonth().get(1)/0.05f, Color.BLUE);
+        panelmonthcoupon.addHistogramColumn("Tháng 3", billDaoImpl.totalMoneyBillMonth().get(2)/0.05f, Color.ORANGE);
+        panelmonthcoupon.addHistogramColumn("Tháng 4", billDaoImpl.totalMoneyBillMonth().get(3)/0.05f, Color.DARK_GRAY);
+        panelmonthcoupon.addHistogramColumn("Tháng 5", billDaoImpl.totalMoneyBillMonth().get(4)/0.05f, Color.GREEN);
+        panelmonthcoupon.addHistogramColumn("Tháng 6", billDaoImpl.totalMoneyBillMonth().get(5)/0.05f, Color.PINK);
+        panelmonthcoupon.addHistogramColumn("Tháng 7", billDaoImpl.totalMoneyBillMonth().get(6)/0.05f, Color.LIGHT_GRAY);
+        panelmonthcoupon.addHistogramColumn("Tháng 8", billDaoImpl.totalMoneyBillMonth().get(7)/0.05f, Color.YELLOW);
+        panelmonthcoupon.addHistogramColumn("Tháng 9", billDaoImpl.totalMoneyBillMonth().get(8)/0.05f, Color.darkGray);
+        panelmonthcoupon.addHistogramColumn("Tháng 10", billDaoImpl.totalMoneyBillMonth().get(9)/0.05f, Color.black);
+        panelmonthcoupon.addHistogramColumn("Tháng 11", billDaoImpl.totalMoneyBillMonth().get(10)/0.05f, Color.GRAY);
+        panelmonthcoupon.addHistogramColumn("Tháng 12", billDaoImpl.totalMoneyBillMonth().get(11)/0.05f, Color.blue);
+        panelmonthcoupon.layoutHistogram();
+
+        chartMonthStatistic.setLayout(new FlowLayout(FlowLayout.LEFT));
+        chartMonthStatistic.add(panelmonthcoupon);
     }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -76,6 +180,13 @@ public class Statistic extends javax.swing.JInternalFrame {
         jLabel3 = new javax.swing.JLabel();
         txtTotalBill = new javax.swing.JLabel();
         jLabel11 = new javax.swing.JLabel();
+        jTabbedPane2 = new javax.swing.JTabbedPane();
+        chartWeek = new javax.swing.JPanel();
+        jLabel5 = new javax.swing.JLabel();
+        charWeekPanel = new javax.swing.JPanel();
+        chartMonth = new javax.swing.JPanel();
+        jLabel6 = new javax.swing.JLabel();
+        chartMonthPanel = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         jPanel5 = new javax.swing.JPanel();
         jPanel9 = new javax.swing.JPanel();
@@ -94,6 +205,13 @@ public class Statistic extends javax.swing.JInternalFrame {
         jLabel22 = new javax.swing.JLabel();
         txtTotalProBill = new javax.swing.JLabel();
         jLabel15 = new javax.swing.JLabel();
+        jTabbedPane3 = new javax.swing.JTabbedPane();
+        jPanel17 = new javax.swing.JPanel();
+        jLabel14 = new javax.swing.JLabel();
+        chartWeekBill = new javax.swing.JPanel();
+        jPanel18 = new javax.swing.JPanel();
+        jLabel8 = new javax.swing.JLabel();
+        chartMothBill = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
         jPanel13 = new javax.swing.JPanel();
         jLabel26 = new javax.swing.JLabel();
@@ -111,6 +229,15 @@ public class Statistic extends javax.swing.JInternalFrame {
         jLabel34 = new javax.swing.JLabel();
         txtTotalCateCoupon = new javax.swing.JLabel();
         jLabel36 = new javax.swing.JLabel();
+        jTabbedPane4 = new javax.swing.JTabbedPane();
+        jPanel21 = new javax.swing.JPanel();
+        jLabel17 = new javax.swing.JLabel();
+        chartWeekStatistic = new javax.swing.JPanel();
+        jPanel22 = new javax.swing.JPanel();
+        jLabel20 = new javax.swing.JLabel();
+        chartMonthStatistic = new javax.swing.JPanel();
+        jPanel19 = new javax.swing.JPanel();
+        jPanel20 = new javax.swing.JPanel();
 
         jPanel4.setBorder(javax.swing.BorderFactory.createEtchedBorder(new java.awt.Color(51, 51, 255), null));
 
@@ -217,7 +344,7 @@ public class Statistic extends javax.swing.JInternalFrame {
                         .addComponent(jLabel12)
                         .addGap(18, 18, 18)
                         .addComponent(txtTotalCoupon)
-                        .addGap(0, 6, Short.MAX_VALUE)))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addGap(46, 46, 46))
         );
         jPanel7Layout.setVerticalGroup(
@@ -275,6 +402,79 @@ public class Statistic extends javax.swing.JInternalFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
+        jLabel5.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        jLabel5.setForeground(new java.awt.Color(255, 51, 51));
+        jLabel5.setText("Biểu Đồ Doanh Thu Theo Tuần");
+
+        javax.swing.GroupLayout charWeekPanelLayout = new javax.swing.GroupLayout(charWeekPanel);
+        charWeekPanel.setLayout(charWeekPanelLayout);
+        charWeekPanelLayout.setHorizontalGroup(
+            charWeekPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 1086, Short.MAX_VALUE)
+        );
+        charWeekPanelLayout.setVerticalGroup(
+            charWeekPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 682, Short.MAX_VALUE)
+        );
+
+        javax.swing.GroupLayout chartWeekLayout = new javax.swing.GroupLayout(chartWeek);
+        chartWeek.setLayout(chartWeekLayout);
+        chartWeekLayout.setHorizontalGroup(
+            chartWeekLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(chartWeekLayout.createSequentialGroup()
+                .addGap(396, 396, 396)
+                .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 287, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addComponent(charWeekPanel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+        chartWeekLayout.setVerticalGroup(
+            chartWeekLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(chartWeekLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(charWeekPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        jTabbedPane2.addTab("Biểu đồ tuần", new javax.swing.ImageIcon(getClass().getResource("/resouce/chartweek.png")), chartWeek); // NOI18N
+
+        jLabel6.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        jLabel6.setForeground(new java.awt.Color(255, 51, 51));
+        jLabel6.setText("Biểu Đồ Doanh Thu Theo Tuần");
+
+        javax.swing.GroupLayout chartMonthPanelLayout = new javax.swing.GroupLayout(chartMonthPanel);
+        chartMonthPanel.setLayout(chartMonthPanelLayout);
+        chartMonthPanelLayout.setHorizontalGroup(
+            chartMonthPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 1086, Short.MAX_VALUE)
+        );
+        chartMonthPanelLayout.setVerticalGroup(
+            chartMonthPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 577, Short.MAX_VALUE)
+        );
+
+        javax.swing.GroupLayout chartMonthLayout = new javax.swing.GroupLayout(chartMonth);
+        chartMonth.setLayout(chartMonthLayout);
+        chartMonthLayout.setHorizontalGroup(
+            chartMonthLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, chartMonthLayout.createSequentialGroup()
+                .addContainerGap(401, Short.MAX_VALUE)
+                .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 287, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(398, 398, 398))
+            .addComponent(chartMonthPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+        chartMonthLayout.setVerticalGroup(
+            chartMonthLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(chartMonthLayout.createSequentialGroup()
+                .addGap(31, 31, 31)
+                .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(chartMonthPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        jTabbedPane2.addTab("Biểu Đồ Tháng", new javax.swing.ImageIcon(getClass().getResource("/resouce/chartmonth.png")), chartMonth); // NOI18N
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -287,6 +487,7 @@ public class Statistic extends javax.swing.JInternalFrame {
                 .addComponent(jPanel8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jPanel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addComponent(jTabbedPane2, javax.swing.GroupLayout.Alignment.TRAILING)
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -297,7 +498,8 @@ public class Statistic extends javax.swing.JInternalFrame {
                     .addComponent(jPanel6, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jPanel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jPanel4, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(799, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addComponent(jTabbedPane2))
         );
 
         jTabbedPane1.addTab("Tổng", new javax.swing.ImageIcon(getClass().getResource("/resouce/icons8_futures_30px.png")), jPanel1); // NOI18N
@@ -400,7 +602,7 @@ public class Statistic extends javax.swing.JInternalFrame {
                 .addGap(18, 18, 18)
                 .addComponent(jLabel21)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(txtTotalMoneyBill, javax.swing.GroupLayout.DEFAULT_SIZE, 157, Short.MAX_VALUE))
+                .addComponent(txtTotalMoneyBill, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel11Layout.setVerticalGroup(
             jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -459,6 +661,84 @@ public class Statistic extends javax.swing.JInternalFrame {
                 .addGap(53, 53, 53))
         );
 
+        jLabel14.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        jLabel14.setForeground(new java.awt.Color(255, 51, 51));
+        jLabel14.setText("Biểu Đồ Doanh Thu Theo Tuần");
+
+        javax.swing.GroupLayout chartWeekBillLayout = new javax.swing.GroupLayout(chartWeekBill);
+        chartWeekBill.setLayout(chartWeekBillLayout);
+        chartWeekBillLayout.setHorizontalGroup(
+            chartWeekBillLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+        chartWeekBillLayout.setVerticalGroup(
+            chartWeekBillLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 614, Short.MAX_VALUE)
+        );
+
+        javax.swing.GroupLayout jPanel17Layout = new javax.swing.GroupLayout(jPanel17);
+        jPanel17.setLayout(jPanel17Layout);
+        jPanel17Layout.setHorizontalGroup(
+            jPanel17Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel17Layout.createSequentialGroup()
+                .addContainerGap(433, Short.MAX_VALUE)
+                .addComponent(jLabel14, javax.swing.GroupLayout.PREFERRED_SIZE, 287, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(376, 376, 376))
+            .addGroup(jPanel17Layout.createSequentialGroup()
+                .addComponent(chartWeekBill, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+        jPanel17Layout.setVerticalGroup(
+            jPanel17Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel17Layout.createSequentialGroup()
+                .addGap(34, 34, 34)
+                .addComponent(jLabel14, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(26, 26, 26)
+                .addComponent(chartWeekBill, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        jTabbedPane3.addTab("Biểu đồ tuần", new javax.swing.ImageIcon(getClass().getResource("/resouce/chartweek.png")), jPanel17); // NOI18N
+
+        jLabel8.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        jLabel8.setForeground(new java.awt.Color(255, 51, 51));
+        jLabel8.setText("Biểu Đồ Doanh Thu Theo Tháng");
+
+        javax.swing.GroupLayout chartMothBillLayout = new javax.swing.GroupLayout(chartMothBill);
+        chartMothBill.setLayout(chartMothBillLayout);
+        chartMothBillLayout.setHorizontalGroup(
+            chartMothBillLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+        chartMothBillLayout.setVerticalGroup(
+            chartMothBillLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 411, Short.MAX_VALUE)
+        );
+
+        javax.swing.GroupLayout jPanel18Layout = new javax.swing.GroupLayout(jPanel18);
+        jPanel18.setLayout(jPanel18Layout);
+        jPanel18Layout.setHorizontalGroup(
+            jPanel18Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel18Layout.createSequentialGroup()
+                .addContainerGap(413, Short.MAX_VALUE)
+                .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 287, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(396, 396, 396))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel18Layout.createSequentialGroup()
+                .addComponent(chartMothBill, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+        jPanel18Layout.setVerticalGroup(
+            jPanel18Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel18Layout.createSequentialGroup()
+                .addGap(24, 24, 24)
+                .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(chartMothBill, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(226, Short.MAX_VALUE))
+        );
+
+        jTabbedPane3.addTab("Biểu đồ tháng", new javax.swing.ImageIcon(getClass().getResource("/resouce/chartmonth.png")), jPanel18); // NOI18N
+
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
         jPanel5Layout.setHorizontalGroup(
@@ -471,6 +751,9 @@ public class Statistic extends javax.swing.JInternalFrame {
                 .addComponent(jPanel12, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jPanel11, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(jPanel5Layout.createSequentialGroup()
+                .addComponent(jTabbedPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 1101, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -481,8 +764,13 @@ public class Statistic extends javax.swing.JInternalFrame {
                     .addComponent(jPanel10, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jPanel9, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jPanel11, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(796, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addComponent(jTabbedPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 779, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(26, Short.MAX_VALUE))
         );
+
+        jTabbedPane3.getAccessibleContext().setAccessibleName("Biểu đồ tuần\n");
+        jTabbedPane3.getAccessibleContext().setAccessibleDescription("");
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -490,11 +778,11 @@ public class Statistic extends javax.swing.JInternalFrame {
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 1091, Short.MAX_VALUE)
             .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, 1091, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1015, Short.MAX_VALUE)
+            .addGap(0, 1042, Short.MAX_VALUE)
             .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addComponent(jPanel5, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -525,7 +813,7 @@ public class Statistic extends javax.swing.JInternalFrame {
                         .addComponent(jLabel26)
                         .addContainerGap())
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel13Layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 9, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(txtTotalMoneyCoupon, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE))))
         );
         jPanel13Layout.setVerticalGroup(
@@ -664,6 +952,80 @@ public class Statistic extends javax.swing.JInternalFrame {
                 .addContainerGap(49, Short.MAX_VALUE))
         );
 
+        jLabel17.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        jLabel17.setForeground(new java.awt.Color(255, 51, 51));
+        jLabel17.setText("Biểu Đồ Doanh Thu Theo Tuần");
+
+        javax.swing.GroupLayout chartWeekStatisticLayout = new javax.swing.GroupLayout(chartWeekStatistic);
+        chartWeekStatistic.setLayout(chartWeekStatisticLayout);
+        chartWeekStatisticLayout.setHorizontalGroup(
+            chartWeekStatisticLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+        chartWeekStatisticLayout.setVerticalGroup(
+            chartWeekStatisticLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 500, Short.MAX_VALUE)
+        );
+
+        javax.swing.GroupLayout jPanel21Layout = new javax.swing.GroupLayout(jPanel21);
+        jPanel21.setLayout(jPanel21Layout);
+        jPanel21Layout.setHorizontalGroup(
+            jPanel21Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel21Layout.createSequentialGroup()
+                .addContainerGap(411, Short.MAX_VALUE)
+                .addComponent(jLabel17)
+                .addGap(399, 399, 399))
+            .addComponent(chartWeekStatistic, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+        jPanel21Layout.setVerticalGroup(
+            jPanel21Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel21Layout.createSequentialGroup()
+                .addGap(32, 32, 32)
+                .addComponent(jLabel17)
+                .addGap(18, 18, 18)
+                .addComponent(chartWeekStatistic, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(148, Short.MAX_VALUE))
+        );
+
+        jTabbedPane4.addTab("Biểu đồ tuần", new javax.swing.ImageIcon(getClass().getResource("/resouce/chartweek.png")), jPanel21); // NOI18N
+
+        jLabel20.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        jLabel20.setForeground(new java.awt.Color(255, 51, 51));
+        jLabel20.setText("Biểu Đồ Doanh Thu Theo Tháng");
+
+        javax.swing.GroupLayout chartMonthStatisticLayout = new javax.swing.GroupLayout(chartMonthStatistic);
+        chartMonthStatistic.setLayout(chartMonthStatisticLayout);
+        chartMonthStatisticLayout.setHorizontalGroup(
+            chartMonthStatisticLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+        chartMonthStatisticLayout.setVerticalGroup(
+            chartMonthStatisticLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 401, Short.MAX_VALUE)
+        );
+
+        javax.swing.GroupLayout jPanel22Layout = new javax.swing.GroupLayout(jPanel22);
+        jPanel22.setLayout(jPanel22Layout);
+        jPanel22Layout.setHorizontalGroup(
+            jPanel22Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel22Layout.createSequentialGroup()
+                .addContainerGap(406, Short.MAX_VALUE)
+                .addComponent(jLabel20)
+                .addGap(393, 393, 393))
+            .addComponent(chartMonthStatistic, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+        jPanel22Layout.setVerticalGroup(
+            jPanel22Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel22Layout.createSequentialGroup()
+                .addGap(30, 30, 30)
+                .addComponent(jLabel20)
+                .addGap(32, 32, 32)
+                .addComponent(chartMonthStatistic, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(235, Short.MAX_VALUE))
+        );
+
+        jTabbedPane4.addTab("Biểu đồ tháng\n", new javax.swing.ImageIcon(getClass().getResource("/resouce/chartmonth.png")), jPanel22); // NOI18N
+
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
@@ -677,6 +1039,7 @@ public class Statistic extends javax.swing.JInternalFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel13, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGap(5, 5, 5))
+            .addComponent(jTabbedPane4)
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -687,20 +1050,59 @@ public class Statistic extends javax.swing.JInternalFrame {
                     .addComponent(jPanel16, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jPanel14, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jPanel13, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(799, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 42, Short.MAX_VALUE)
+                .addComponent(jTabbedPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 784, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
+        jTabbedPane4.getAccessibleContext().setAccessibleName("jtablepanl\n");
+
         jTabbedPane1.addTab("Nhập Vào", new javax.swing.ImageIcon(getClass().getResource("/resouce/icons8_downloads_30px.png")), jPanel3); // NOI18N
+
+        javax.swing.GroupLayout jPanel20Layout = new javax.swing.GroupLayout(jPanel20);
+        jPanel20.setLayout(jPanel20Layout);
+        jPanel20Layout.setHorizontalGroup(
+            jPanel20Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 100, Short.MAX_VALUE)
+        );
+        jPanel20Layout.setVerticalGroup(
+            jPanel20Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 100, Short.MAX_VALUE)
+        );
+
+        javax.swing.GroupLayout jPanel19Layout = new javax.swing.GroupLayout(jPanel19);
+        jPanel19.setLayout(jPanel19Layout);
+        jPanel19Layout.setHorizontalGroup(
+            jPanel19Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel19Layout.createSequentialGroup()
+                .addGap(242, 242, 242)
+                .addComponent(jPanel20, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        jPanel19Layout.setVerticalGroup(
+            jPanel19Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel19Layout.createSequentialGroup()
+                .addGap(193, 193, 193)
+                .addComponent(jPanel20, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jTabbedPane1, javax.swing.GroupLayout.Alignment.TRAILING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addComponent(jTabbedPane1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanel19, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jTabbedPane1)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jPanel19, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         pack();
@@ -708,16 +1110,27 @@ public class Statistic extends javax.swing.JInternalFrame {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JPanel charWeekPanel;
+    private javax.swing.JPanel chartMonth;
+    private javax.swing.JPanel chartMonthPanel;
+    private javax.swing.JPanel chartMonthStatistic;
+    private javax.swing.JPanel chartMothBill;
+    private javax.swing.JPanel chartWeek;
+    private javax.swing.JPanel chartWeekBill;
+    private javax.swing.JPanel chartWeekStatistic;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
+    private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel16;
+    private javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel18;
     private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel20;
     private javax.swing.JLabel jLabel21;
     private javax.swing.JLabel jLabel22;
     private javax.swing.JLabel jLabel24;
@@ -731,6 +1144,9 @@ public class Statistic extends javax.swing.JInternalFrame {
     private javax.swing.JLabel jLabel34;
     private javax.swing.JLabel jLabel36;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel10;
@@ -740,7 +1156,13 @@ public class Statistic extends javax.swing.JInternalFrame {
     private javax.swing.JPanel jPanel14;
     private javax.swing.JPanel jPanel15;
     private javax.swing.JPanel jPanel16;
+    private javax.swing.JPanel jPanel17;
+    private javax.swing.JPanel jPanel18;
+    private javax.swing.JPanel jPanel19;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel20;
+    private javax.swing.JPanel jPanel21;
+    private javax.swing.JPanel jPanel22;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
@@ -749,6 +1171,9 @@ public class Statistic extends javax.swing.JInternalFrame {
     private javax.swing.JPanel jPanel8;
     private javax.swing.JPanel jPanel9;
     private javax.swing.JTabbedPane jTabbedPane1;
+    private javax.swing.JTabbedPane jTabbedPane2;
+    private javax.swing.JTabbedPane jTabbedPane3;
+    private javax.swing.JTabbedPane jTabbedPane4;
     private javax.swing.JLabel txtBill;
     private javax.swing.JLabel txtCoupon;
     private javax.swing.JLabel txtTotalBill;
