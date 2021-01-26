@@ -59,7 +59,7 @@ public class CouponList extends javax.swing.JInternalFrame {
         total_price.setText("");
         msg.setText("");
         coup_id = null;
-        listPro = null;
+        listPro = new ArrayList<>();
         checkChooserPro = false;
     }
 
